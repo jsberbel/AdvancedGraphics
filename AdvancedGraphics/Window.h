@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <SDL\SDL.h>
+#include <GL\glew.h>
 #include "ErrorManager.h"
 
 class Window {

@@ -1,5 +1,4 @@
 #include "GameEngine.h"
-#include "ImageLoader.h"
 
 GameEngine::GameEngine(const std::string &engineName, const int &screenWidth, const int &screenHeight) : 
 	_window(new GLWindow(screenWidth, screenHeight, engineName)),
@@ -26,15 +25,7 @@ void GameEngine::initShaders() {
 	_program.linkShaders();
 }
 
-
-void pause_thread(int n)
-{
-	std::this_thread::sleep_for(std::chrono::seconds(n));
-	std::cout << "pause of " << n << " seconds ended\n";
-}
 void GameEngine::gameLoop() {
-	_sprite.init(-0.5f, -0.5f, 1, 1);
-	_texture = ImageLoader::loadPNG("./Textures/serraplo.png");
 	while (_gameState != GameState::EXIT) {
 		processInput();
 		_time += (float)0.001;
@@ -64,7 +55,7 @@ void GameEngine::drawGame() {
 	_program.bind();
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _texture.id);
+	//glBindTexture(GL_TEXTURE_2D, _texture.id);
 	GLint textureLocation = _program.getUniformLocation("sampler");
 	glUniform1i(textureLocation, 0);
 
@@ -83,5 +74,6 @@ void GameEngine::drawGame() {
 void GameEngine::run() {
 	initSystems();
 	initShaders();
+	_sprite.init(-0.5f, -0.5f, 1, 1, "./Textures/serraplo.png");
 	gameLoop();	
 }

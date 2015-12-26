@@ -1,12 +1,8 @@
 #pragma once
-#include <thread> 
 #include <iostream>
-#include <SDL\SDL.h>
-#include <GL\glew.h>
 #include "Window.h"
 #include "Sprite.h"
 #include "GLSLManager.h"
-#include "GLTexture.h"
 
 #define FULL_SCREEN false
 
@@ -18,7 +14,6 @@ class GameEngine
 	GLSLManager _program;
 	Window* _window;
 	Sprite _sprite;
-	GLTexture _texture;
 	GameState _gameState;
 	int _screenWidth;
 	int _screenHeight;
