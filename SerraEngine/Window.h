@@ -1,52 +1,31 @@
 #pragma once
-#include <iostream>
 #include <SDL\SDL.h>
 #include <GL\glew.h>
-#include "ErrorManager.h"
+#include <string>
 
-class Window {
-protected:
-	SDL_Window* _SDLWindow;
-	const std::string _engineName;
-	int _screenWidth;
-	int _screenHeight;
-public:
-	Window(const int &sw = 600, const int &sh = 600, const std::string &name = "") : _SDLWindow(nullptr), _screenWidth(sw), _screenHeight(sh), _engineName(name) {};
-	~Window() {
-		if (_SDLWindow != 0) SDL_DestroyWindow(_SDLWindow);
-		SDL_Quit();
-	};
-	virtual void createWindow(bool fullScreen = false, const Uint32 &flag = 0) {
-		_SDLWindow = SDL_CreateWindow(_engineName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, flag);
-		if (_SDLWindow == nullptr) ErrorManager::errorRunTime("SDL Window could not be created.");
-	};
-	inline void changeSize(const int &sw, const int &sh) {
-		SDL_SetWindowSize(_SDLWindow, sw, sh);
-	};
-	inline SDL_Window* getWindow() {
-		return _SDLWindow;
-	};
-};
+namespace SerraEngine {
+	enum WindowFlags { INVISIBLE = 0x1, FULLSCREEN = 0x2, BORDERLESS = 0x4 };
 
-class GLWindow : public Window {
-	SDL_GLContext glContext;
-public:
-	GLWindow(const int &sw = 600, const int &sh = 600, const std::string &name = "") : Window(sw, sh, name) {};
-	~GLWindow() {
-		if (_SDLWindow != 0) SDL_DestroyWindow(_SDLWindow);
-		if (glContext != 0) SDL_GL_DeleteContext(glContext);
-		SDL_Quit();
+	class Window {
+	protected:
+		SDL_Window* _SDLWindow;
+		const std::string _engineName;
+		int _screenWidth;
+		int _screenHeight;
+	public:
+		Window(int sw = 600, int sh = 600, const std::string &name = "");
+		~Window();
+		virtual void createWindow(const unsigned &curFlags = 0);
+		inline void changeSize(const int &sw, const int &sh) const { SDL_SetWindowSize(_SDLWindow, sw, sh); };
+		inline SDL_Window* getWindow() const { return _SDLWindow; };
+		inline void swapBuffer() const { SDL_GL_SwapWindow(_SDLWindow); };
 	};
-	void createWindow(bool fullScreen = false, const Uint32 &flag = 0) {
-		//tell we want a double buffered windows to avoid flickering
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		_SDLWindow = SDL_CreateWindow(_engineName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL | flag | ((fullScreen) ? (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_BORDERLESS):0));
-		if (_SDLWindow == nullptr) ErrorManager::errorRunTime("SDL Window could not be created.");
-		glContext = SDL_GL_CreateContext(_SDLWindow);
-		if (glContext == nullptr) ErrorManager::errorRunTime("SDL_GL Context could not be created.");
-		GLenum error = glewInit();
-		if (error != GLEW_OK) ErrorManager::errorRunTime("GLEW could not be initialized.");
-		std::printf("***  OpenGL Version: %s  ***\n", glGetString(GL_VERSION));
-		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+
+	class GLWindow : public Window {
+		SDL_GLContext glContext;
+	public:
+		GLWindow(int sw = 600, int sh = 600, const std::string &name = "");
+		~GLWindow();
+		void createWindow(const unsigned &curFlags = 0);
 	};
-};
+}

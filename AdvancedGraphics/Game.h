@@ -1,22 +1,24 @@
 #pragma once
-#include <iostream>
+#include <SerraEngine/SerraEngine.h>
 #include <SerraEngine/Window.h>
 #include <SerraEngine/Sprite.h>
 #include <SerraEngine/GLSLManager.h>
 #include <SerraEngine/FPSLimiter.h>
-
-#define FULL_SCREEN false
+#include <SerraEngine/Camera2D.h>
+#include <SerraEngine/SpriteBatch.h>
 
 enum class GameState{INIT, PLAY, EXIT};
 
 class Game
 {
 	//attributes
-	GLSLManager _program;
-	Window* _window;
-	Sprite _sprite;
+	SerraEngine::GLSLManager _program;
+	SerraEngine::Window* _window;
+	SerraEngine::Camera2D _camera;
+	SerraEngine::SpriteBatch _spriteBatch;
+	SerraEngine::FPSLimiter _fpsLimiter;
+
 	GameState _gameState;
-	FPSLimiter _fpsLimiter;
 	int _screenWidth;
 	int _screenHeight;
 

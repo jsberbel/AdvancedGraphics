@@ -2,9 +2,11 @@
 #include <string>
 #include "GLTexture.h"
 
-class ImageLoader
-{
-public:
-	static GLTexture loadPNG(std::string filePath);
-};
+namespace SerraEngine {
+	class ImageLoader
+	{
+	public:
+		static GLTexture loadPNG(std::string filePath);
+	};
+}
 
