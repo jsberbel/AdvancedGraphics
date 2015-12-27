@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Sprite.h"
 #include "GLSLManager.h"
+#include "FPSLimiter.h"
 
 #define FULL_SCREEN false
 
@@ -15,8 +16,10 @@ class GameEngine
 	Window* _window;
 	Sprite _sprite;
 	GameState _gameState;
+	FPSLimiter _fpsLimiter;
 	int _screenWidth;
 	int _screenHeight;
+
 	float _time;
 
 	//private methods

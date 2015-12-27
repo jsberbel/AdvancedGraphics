@@ -69,12 +69,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(Solutiondir)/deps/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(Solutiondir)/deps/lib/;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>$(Solutiondir)/deps/include;$(Solutiondir)/SerraEngine/;$(Solutiondir)/deps/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(IncludePath)</IncludePath>
+    <LibraryPath>$(Solutiondir)/deps/lib/;$(Solutiondir)/Debug/;$(Solutiondir)/deps/lib/;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(Solutiondir)/deps/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(Solutiondir)/deps/lib/;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>$(Solutiondir)/deps/include;$(Solutiondir)/SerraEngine/;$(Solutiondir)/deps/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(IncludePath)</IncludePath>
+    <LibraryPath>$(Solutiondir)/deps/lib/;$(Solutiondir)/Debug/;$(Solutiondir)/deps/lib/;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(Solutiondir)/deps/include;$(Solutiondir)/SerraEngine/;$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(IncludePath)</IncludePath>
+    <LibraryPath>$(Solutiondir)/deps/lib/;$(Solutiondir)/Debug/;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(Solutiondir)/deps/include;$(Solutiondir)/SerraEngine/;$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(IncludePath)</IncludePath>
+    <LibraryPath>$(Solutiondir)/deps/lib/;$(Solutiondir)/Debug/;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -84,7 +92,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SerraEngine.lib;glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -96,6 +104,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SerraEngine.lib;glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,7 +119,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SerraEngine.lib;glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -126,31 +135,15 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SerraEngine.lib;glew32.lib;opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp" />
-    <ClCompile Include="GLSLManager.cpp" />
-    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="picoPNG.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="TextureCache.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ErrorManager.h" />
     <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="GLSLManager.h" />
-    <ClInclude Include="GLTexture.h" />
-    <ClInclude Include="ImageLoader.h" />
-    <ClInclude Include="IOManager.h" />
-    <ClInclude Include="picoPNG.h" />
-    <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="TextureCache.h" />
-    <ClInclude Include="Vertex.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\colorShading.frag" />
