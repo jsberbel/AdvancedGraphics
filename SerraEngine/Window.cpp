@@ -47,7 +47,11 @@ namespace SerraEngine {
 		GLenum error = glewInit();
 		if (error != GLEW_OK) ErrorManager::errorRunTime("GLEW could not be initialized.");
 		std::printf("***  OpenGL Version: %s  ***\n", glGetString(GL_VERSION));
-		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		glClearColor(0.0f, 0.0f, 1.0f, 1.0f); //Set background color
+		SDL_GL_SetSwapInterval(0); //Set V-Sync
+		//Enable alpha blending
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	};
 
 }

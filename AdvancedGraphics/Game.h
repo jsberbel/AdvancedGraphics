@@ -6,6 +6,8 @@
 #include <SerraEngine/FPSLimiter.h>
 #include <SerraEngine/Camera2D.h>
 #include <SerraEngine/SpriteBatch.h>
+#include <SerraEngine/InputManager.h>
+#include "Bullet.h"
 
 enum class GameState{INIT, PLAY, EXIT};
 
@@ -17,6 +19,8 @@ class Game
 	SerraEngine::Camera2D _camera;
 	SerraEngine::SpriteBatch _spriteBatch;
 	SerraEngine::FPSLimiter _fpsLimiter;
+	SerraEngine::InputManager _inputManager;
+	std::vector<Bullet> _bullets;
 
 	GameState _gameState;
 	int _screenWidth;

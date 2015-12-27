@@ -65,24 +65,25 @@ void SpriteBatch::createRenderBatches() {
 	std::vector<Vertex> vertices;
 	vertices.resize(_glyphs.size() * 6); //6 vertices for each glyph
 
-	int offset = 0;
+	int offset = 0; //current offset
 	int curVertex = 0; //current vertex
+	//Add the first batch
 	_renderBatches.emplace_back(offset, 6, _glyphs[0]->texture); //push_back that creates an object automatically with the parameters
 	vertices[curVertex++] = _glyphs[0]->topLeft;
 	vertices[curVertex++] = _glyphs[0]->bottomLeft;
 	vertices[curVertex++] = _glyphs[0]->bottomRight;
+	vertices[curVertex++] = _glyphs[0]->bottomRight;
 	vertices[curVertex++] = _glyphs[0]->topRight;
 	vertices[curVertex++] = _glyphs[0]->topLeft;
 	offset += 6;
-
-	for (int curGlyph = 1; curGlyph < _glyphs.size(); curGlyph++) {
+	for (unsigned curGlyph = 1; curGlyph < _glyphs.size(); curGlyph++) {
 		if (_glyphs[curGlyph]->texture != _glyphs[curGlyph - 1]->texture) {
 			_renderBatches.emplace_back(offset, 6, _glyphs[curGlyph]->texture);
-		} else {
-			_renderBatches.back().numVertices += 6;
 		}
+		else _renderBatches.back().numVertices += 6;
 		vertices[curVertex++] = _glyphs[curGlyph]->topLeft;
 		vertices[curVertex++] = _glyphs[curGlyph]->bottomLeft;
+		vertices[curVertex++] = _glyphs[curGlyph]->bottomRight;
 		vertices[curVertex++] = _glyphs[curGlyph]->bottomRight;
 		vertices[curVertex++] = _glyphs[curGlyph]->topRight;
 		vertices[curVertex++] = _glyphs[curGlyph]->topLeft;

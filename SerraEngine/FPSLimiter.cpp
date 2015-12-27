@@ -3,46 +3,48 @@
 
 namespace SerraEngine {
 
-	FPSLimiter::FPSLimiter() :_fps(0), _maxFPS(120.0f), _startTicks(0), _frameTicks(0)
-	{
-	}
+FPSLimiter::FPSLimiter() :
+	_fps(0), 
+	_targetFPS(120.0f), 
+	_startTicks(0),
+	_frameTicks(0) {}
 
-	FPSLimiter::FPSLimiter(float maxFPS) : _fps(0), _maxFPS(maxFPS), _startTicks(0), _frameTicks(0)
-	{
-	}
+FPSLimiter::FPSLimiter(float targetFPS) : 
+	_fps(0),
+	_targetFPS(targetFPS), 
+	_startTicks(0), 
+	_frameTicks(0) {}
 
-	FPSLimiter::~FPSLimiter()
-	{
-	}
+FPSLimiter::~FPSLimiter() {}
 
-	void FPSLimiter::calculateFPS()
-	{
-		static Uint32 frameTimes[NUM_SAMPLES];
-		static int curFrame = 0;
+void FPSLimiter::calculateFPS() {
+	static float frameTimes[NUM_SAMPLES];
+	static int curFrame = 0;
 
-		static auto prevTicks = SDL_GetTicks();
-		auto curTicks = SDL_GetTicks();
+	static auto prevTicks = SDL_GetTicks();
+	auto curTicks = SDL_GetTicks();
 
-		frameTimes[curFrame] = curTicks - prevTicks;
-		prevTicks = curTicks;
+	frameTimes[curFrame] = (float)(curTicks - prevTicks);
+	prevTicks = curTicks;
 
-		static int count = 0;
-		curFrame++;
-		if (count < NUM_SAMPLES) count = curFrame;
-		else count = NUM_SAMPLES;
-		if (curFrame == NUM_SAMPLES) curFrame = 0, std::cout << _fps << std::endl;;
+	static int count = 0;
+	curFrame++;
+	if (count < NUM_SAMPLES) count = curFrame;
+	else count = NUM_SAMPLES;
+	if (curFrame == NUM_SAMPLES) curFrame = 0, std::cout << _fps << std::endl;
 
-		Uint32 frameTimeAverage = 0;
-		for (int i = 0; i < count; i++) frameTimeAverage += frameTimes[i];
-		frameTimeAverage /= count;
+	float frameTimeAverage = 0;
+	for (int i = 0; i < count; i++) frameTimeAverage += frameTimes[i];
+	frameTimeAverage /= count;
 
-		if (frameTimeAverage > 0) _fps = 1000.0f / frameTimeAverage;
-		else _fps = 60.0f;
-	}
+	if (frameTimeAverage > 0) _fps = 1000.0f / frameTimeAverage;
+	else _fps = 60.0f;
+}
 
-	void FPSLimiter::setFrameTicks() {
-		_frameTicks = SDL_GetTicks() - _startTicks;
-		if (1000.0f / _maxFPS > _frameTicks) SDL_Delay((Uint32)(1000.0f / _maxFPS - _frameTicks));
-	};
+void FPSLimiter::end() {
+	calculateFPS();
+	_frameTicks = SDL_GetTicks() - _startTicks;
+	if (1000.0f / _targetFPS > _frameTicks) SDL_Delay((Uint32)(1000.0f / _targetFPS - _frameTicks));
+}
 
 }
