@@ -5,10 +5,11 @@
 
 namespace SerraEngine {
 
-	GLSLManager::GLSLManager() : _programID(0), _vertexShaderID(0), _fragmentShaderID(0), _numAttributes(0)
-	{
-
-	}
+	GLSLManager::GLSLManager() : 
+		_programID(0), 
+		_vertexShaderID(0), 
+		_fragmentShaderID(0),
+		_numAttributes(0) {}
 
 	GLSLManager::~GLSLManager()
 	{
@@ -21,7 +22,7 @@ namespace SerraEngine {
 		std::ifstream shaderFile(filePath);
 		if (shaderFile.fail()) {
 			perror(filePath.c_str());
-			ErrorManager::errorRunTime("Failed to open: " + filePath);
+			errorRunTime("Failed to open: " + filePath);
 		}
 		std::string fileContents = "";
 		std::string line;
@@ -41,16 +42,16 @@ namespace SerraEngine {
 			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
 			glDeleteShader(id);
 			std::cout << &errorLog[0] << std::endl;
-			ErrorManager::errorRunTime("Shader " + filePath + " failed to be compiled.");
+			errorRunTime("Shader " + filePath + " failed to be compiled.");
 		}
 	}
 
 	void GLSLManager::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
 		_programID = glCreateProgram();
 		_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-		if (_vertexShaderID == 0) ErrorManager::errorRunTime("Vertex shader failed to be created.");
+		if (_vertexShaderID == 0) errorRunTime("Vertex shader failed to be created.");
 		_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-		if (_fragmentShaderID == 0) ErrorManager::errorRunTime("Fragment shader failed to be created.");
+		if (_fragmentShaderID == 0) errorRunTime("Fragment shader failed to be created.");
 
 		compileShader(vertexShaderFilePath, _vertexShaderID);
 		compileShader(fragmentShaderFilePath, _fragmentShaderID);
@@ -72,7 +73,7 @@ namespace SerraEngine {
 			glDeleteShader(_vertexShaderID);
 			glDeleteShader(_fragmentShaderID);
 			std::cout << &errorLog[0] << std::endl;
-			ErrorManager::errorRunTime("Program failed to be compiled.");
+			errorRunTime("Program failed to be compiled.");
 		}
 
 		glDetachShader(_programID, _vertexShaderID);
@@ -88,7 +89,7 @@ namespace SerraEngine {
 	GLint GLSLManager::getUniformLocation(const std::string & uniformName) {
 		GLint location = glGetUniformLocation(_programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX) {
-			ErrorManager::errorRunTime("Uniform " + uniformName + " not found on shader");
+			errorRunTime("Uniform " + uniformName + " not found on shader");
 			return 0;
 		}
 		return location;

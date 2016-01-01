@@ -2,6 +2,7 @@
 #include <SDL\SDL.h>
 #include <GL\glew.h>
 #include <string>
+#include "Vertex.h"
 
 namespace SerraEngine {
 	enum WindowFlags { INVISIBLE = 0x1, FULLSCREEN = 0x2, BORDERLESS = 0x4 };
@@ -26,6 +27,6 @@ namespace SerraEngine {
 	public:
 		GLWindow(int sw = 600, int sh = 600, const std::string &name = "");
 		~GLWindow();
-		void createWindow(const unsigned &curFlags = 0);
+		void createWindow(const Color& c = { 255, 255, 255, 255 }, const unsigned &curFlags = 0);
 	};
 }

@@ -38,7 +38,7 @@ void Game::gameLoop() {
 		_time += 0.01f;
 		_camera.update();
 		//Update bullets
-		for (int i = 0; i < _bullets.size(); i++) {
+		for (unsigned i = 0; i < _bullets.size(); i++) {
 			if (_bullets[i].update()) _bullets[i] = _bullets.back(), _bullets.pop_back();
 		}
 		drawGame();

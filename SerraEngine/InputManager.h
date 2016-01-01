@@ -10,7 +10,7 @@ class InputManager
 	std::unordered_map<unsigned int, bool> _keyMap;
 public:
 	InputManager();
-	~InputManager();
+	~InputManager() = default;
 
 	void pressKey(unsigned keyID);
 	void releaseKey(unsigned keyID);

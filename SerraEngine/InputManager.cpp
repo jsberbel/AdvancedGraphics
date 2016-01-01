@@ -5,10 +5,6 @@ namespace SerraEngine {
 InputManager::InputManager() : _mouseCoords(0.0f,0.0f)
 {}
 
-
-InputManager::~InputManager()
-{}
-
 void InputManager::pressKey(unsigned keyID) {
 	_keyMap[keyID] = true;
 }

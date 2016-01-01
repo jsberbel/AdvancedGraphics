@@ -15,7 +15,7 @@ class Camera2D
 public:
 	Camera2D();
 	Camera2D(int screenWidth, int screenHeight);
-	~Camera2D();
+	~Camera2D() = default;
 
 	void init(int screenWidth, int screenHeight);
 	void update();

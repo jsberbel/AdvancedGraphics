@@ -3,14 +3,8 @@
 
 namespace SerraEngine {
 	
-SpriteBatch::SpriteBatch() : _vbo(0), _vao(0)
-{
-}
-
-
-SpriteBatch::~SpriteBatch()
-{
-}
+SpriteBatch::SpriteBatch() : _vbo(0), _vao(0), _sortType(GlyphSortType::NONE)
+{}
 
 void SpriteBatch::init() {
 	createVertexArray();
@@ -19,7 +13,7 @@ void SpriteBatch::init() {
 void SpriteBatch::begin(GlyphSortType sortType){
 	_sortType = sortType;
 	_renderBatches.clear();
-	for (Glyph* g : _glyphs) delete g;
+	for (auto g : _glyphs) delete g, g = nullptr;
 	_glyphs.clear();
 }
 

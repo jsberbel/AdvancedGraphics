@@ -175,7 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="ErrorManager.h" />
-    <ClInclude Include="FPSLimiter.h" />
+    <ClInclude Include="Timing.h" />
     <ClInclude Include="GLSLManager.h" />
     <ClInclude Include="GLTexture.h" />
     <ClInclude Include="ImageLoader.h" />
@@ -192,7 +192,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera2D.cpp" />
-    <ClCompile Include="FPSLimiter.cpp" />
+    <ClCompile Include="ErrorManager.cpp" />
+    <ClCompile Include="Timing.cpp" />
     <ClCompile Include="GLSLManager.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="InputManager.cpp" />

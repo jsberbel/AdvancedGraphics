@@ -3,11 +3,15 @@
 
 namespace SerraEngine {
 
+	//========================================================
+	//						WINDOW
+	//========================================================
+
 	Window::Window(int sw, int sh, const std::string &name) :
 		_SDLWindow(nullptr),
+		_engineName(name),
 		_screenWidth(sw),
-		_screenHeight(sh),
-		_engineName(name)
+		_screenHeight(sh)
 	{};
 
 	Window::~Window() {
@@ -21,11 +25,15 @@ namespace SerraEngine {
 		else if (curFlags & FULLSCREEN) flags |= SDL_WINDOW_HIDDEN;
 		else if (curFlags & BORDERLESS) flags |= SDL_WINDOW_HIDDEN;
 		_SDLWindow = SDL_CreateWindow(_engineName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, flags);
-		if (_SDLWindow == nullptr) ErrorManager::errorRunTime("SDL Window could not be created.");
+		if (_SDLWindow == nullptr) errorRunTime("SDL Window could not be created.");
 	};
 
+	//========================================================
+	//						GLWINDOW
+	//========================================================
 
 	GLWindow::GLWindow(int sw, int sh, const std::string &name) :
+		glContext(nullptr),
 		Window(sw, sh, name)
 	{};
 
@@ -35,19 +43,19 @@ namespace SerraEngine {
 		SDL_Quit();
 	};
 
-	void GLWindow::createWindow(const unsigned &curFlags) {
+	void GLWindow::createWindow(const Color& c, const unsigned &curFlags) {
 		Uint32 flags = SDL_WINDOW_OPENGL;
 		if (curFlags & INVISIBLE) flags |= SDL_WINDOW_HIDDEN;
 		else if (curFlags & FULLSCREEN) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		else if (curFlags & BORDERLESS) flags |= SDL_WINDOW_BORDERLESS;
 		_SDLWindow = SDL_CreateWindow(_engineName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, flags);
-		if (_SDLWindow == nullptr) ErrorManager::errorRunTime("SDL Window could not be created.");
+		if (_SDLWindow == nullptr) errorRunTime("SDL Window could not be created.");
 		glContext = SDL_GL_CreateContext(_SDLWindow);
-		if (glContext == nullptr) ErrorManager::errorRunTime("SDL_GL Context could not be created.");
+		if (glContext == nullptr) errorRunTime("SDL_GL Context could not be created.");
 		GLenum error = glewInit();
-		if (error != GLEW_OK) ErrorManager::errorRunTime("GLEW could not be initialized.");
+		if (error != GLEW_OK) errorRunTime("GLEW could not be initialized.");
 		std::printf("***  OpenGL Version: %s  ***\n", glGetString(GL_VERSION));
-		glClearColor(0.0f, 0.0f, 1.0f, 1.0f); //Set background color
+		glClearColor((float)c.r/255, (float)c.g / 255, (float)c.b / 255, (float)c.a / 255); //Set background color
 		SDL_GL_SetSwapInterval(0); //Set V-Sync
 		//Enable alpha blending
 		glEnable(GL_BLEND);

@@ -1,4 +1,4 @@
-#include "FPSLimiter.h"
+#include "Timing.h"
 #include <iostream>
 
 namespace SerraEngine {
@@ -11,11 +11,9 @@ FPSLimiter::FPSLimiter() :
 
 FPSLimiter::FPSLimiter(float targetFPS) : 
 	_fps(0),
-	_targetFPS(targetFPS), 
-	_startTicks(0), 
+	_targetFPS(targetFPS),
+	_startTicks(0),
 	_frameTicks(0) {}
-
-FPSLimiter::~FPSLimiter() {}
 
 void FPSLimiter::calculateFPS() {
 	static float frameTimes[NUM_SAMPLES];

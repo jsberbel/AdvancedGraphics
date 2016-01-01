@@ -16,7 +16,7 @@ class FPSLimiter
 public:
 	FPSLimiter();
 	FPSLimiter(float targetFPS);
-	~FPSLimiter();
+	~FPSLimiter() = default;
 
 	inline void setTargetFPS(float targetFPS) { _targetFPS = targetFPS; };
 	inline float getFPS() const { return _fps; };

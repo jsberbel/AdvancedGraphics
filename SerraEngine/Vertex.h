@@ -3,10 +3,11 @@
 #include <cstddef>
 
 namespace SerraEngine {
+
 	struct Position {
 		GLfloat x;
 		GLfloat y;
-		Position() {};
+		Position() = default;
 	};
 
 	struct Color {
@@ -14,7 +15,7 @@ namespace SerraEngine {
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
-		Color() {};
+		Color() = default;
 		Color(GLubyte r_, GLubyte g_, GLubyte b_, GLubyte a_) :
 			r(r_),
 			g(g_),
@@ -25,7 +26,7 @@ namespace SerraEngine {
 	struct UV {
 		GLfloat u;
 		GLfloat v;
-		UV() {};
+		UV() = default;
 	};
 
 	struct Vertex {
@@ -55,6 +56,6 @@ namespace SerraEngine {
 		void setUV(UV uv_) {
 			uv = uv_;
 		};
-		Vertex() {};
+		Vertex() = default;
 	};
 }

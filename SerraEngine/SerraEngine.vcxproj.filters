@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Resource Classes">
-      <UniqueIdentifier>{1b436b11-93ee-4837-9c1b-5812dea2012f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Resource Classes">
-      <UniqueIdentifier>{b5be9c16-51bd-4556-97f7-e56aa26693af}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,9 +30,6 @@
     <ClInclude Include="ErrorManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FPSLimiter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLSLManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -51,32 +42,32 @@
     <ClInclude Include="InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Header Files\Resource Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureCache.h">
-      <Filter>Header Files\Resource Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Header Files\Resource Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="picoPNG.h">
-      <Filter>Header Files\Resource Classes</Filter>
+    <ClInclude Include="GLTexture.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImageLoader.h">
-      <Filter>Header Files\Resource Classes</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLTexture.h">
-      <Filter>Header Files\Resource Classes</Filter>
+    <ClInclude Include="picoPNG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
-      <Filter>Header Files\Resource Classes</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timing.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FPSLimiter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLSLManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -92,23 +83,29 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureCache.cpp">
-      <Filter>Source Files\Resource Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteBatch.cpp">
-      <Filter>Source Files\Resource Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files\Resource Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source Files\Resource Classes</Filter>
-    </ClCompile>
     <ClCompile Include="ImageLoader.cpp">
-      <Filter>Source Files\Resource Classes</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="picoPNG.cpp">
-      <Filter>Source Files\Resource Classes</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Timing.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

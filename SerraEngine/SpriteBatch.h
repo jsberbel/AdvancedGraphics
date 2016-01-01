@@ -55,7 +55,7 @@ class SpriteBatch
 	static bool compareTexture(Glyph* a, Glyph* b);
 public:
 	SpriteBatch();
-	~SpriteBatch();
+	~SpriteBatch() = default;
 
 	void init();
 	void begin(GlyphSortType sortType = GlyphSortType::TEXTURE);

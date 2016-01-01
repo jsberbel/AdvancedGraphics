@@ -10,8 +10,7 @@ Camera2D::Camera2D() :
 	_position(0.0f, 0.0f),
 	_cameraMatrix(1.0f),
 	_orthoMatrix(1.0f)
-{
-}
+{}
 
 Camera2D::Camera2D(int screenWidth, int screenHeight) :
 	_screenWidth(screenWidth),
@@ -23,11 +22,6 @@ Camera2D::Camera2D(int screenWidth, int screenHeight) :
 	_orthoMatrix(1.0f)
 {
 	_orthoMatrix = glm::ortho(0.0f, (float)_screenWidth, 0.0f, (float)_screenHeight);
-}
-
-
-Camera2D::~Camera2D()
-{
 }
 
 void Camera2D::init(int screenWidth, int screenHeight) {
