@@ -1,8 +1,6 @@
 #pragma once
 #include <SDL\SDL.h>
 
-#define NUM_SAMPLES 10
-
 namespace SerraEngine {
 
 class FPSLimiter
@@ -11,6 +9,7 @@ class FPSLimiter
 	float _targetFPS;
 	Uint32 _startTicks;
 	Uint32 _frameTicks;
+	static const int NUM_SAMPLES;
 
 	void calculateFPS();
 public:

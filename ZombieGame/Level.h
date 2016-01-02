@@ -7,14 +7,19 @@
 
 class Level
 {
-	std::vector<std::string> _lvlData;
 	int _numHumans;
-	SerraEngine::SpriteBatch _spriteBatch;
-	glm::ivec2 _startPlayerPos;
-	std::vector<glm::ivec2> _zombiesStartPosition;
+	std::vector<std::string> _lvlData;
+	SerraEngine::SpriteBatch _lvlBatch;
+
+	glm::vec2 _playerStartPos;
+	std::vector<glm::vec2> _zombiesStartPosition;
 public:
 	Level(const std::string& fileName);
-	~Level();
+	~Level() = default;
 	void draw();
+
+	//getters
+	inline glm::vec2 getStartPlayerPos() const { return _playerStartPos; };
+	inline const std::vector<glm::vec2> &getStartZombiePos() const { return _zombiesStartPosition; };
 };
 

@@ -3,6 +3,8 @@
 
 namespace SerraEngine {
 
+const int FPSLimiter::NUM_SAMPLES = 10;
+
 FPSLimiter::FPSLimiter() :
 	_fps(0), 
 	_targetFPS(120.0f), 

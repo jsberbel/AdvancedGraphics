@@ -6,6 +6,10 @@ namespace SerraEngine {
 SpriteBatch::SpriteBatch() : _vbo(0), _vao(0), _sortType(GlyphSortType::NONE)
 {}
 
+SpriteBatch::SpriteBatch(const SpriteBatch& spriteBatch) {
+	*this = spriteBatch;
+}
+
 void SpriteBatch::init() {
 	createVertexArray();
 }
@@ -22,7 +26,7 @@ void SpriteBatch::end(){
 	createRenderBatches();
 }
 
-void SpriteBatch::draw(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const Color &color) {
+void SpriteBatch::pushBatch(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const Color &color) {
 	Glyph* temp = new Glyph(texture, depth);
 
 	temp->topLeft.setColor(color);

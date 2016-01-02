@@ -12,11 +12,11 @@ Level::Level(const std::string& fileName) {
 	file >> tmp >> _numHumans;
 	while (std::getline(file, tmp)) _lvlData.push_back(tmp);
 	
-	_spriteBatch.init();
-	_spriteBatch.begin();
+	_lvlBatch.init();
+	_lvlBatch.begin();
 
 	glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
-	for (unsigned y = _lvlData.size()-1; y > 0; y--) {
+	for (unsigned y = 0; y <  _lvlData.size(); y++) {
 		for (unsigned x = 0; x < _lvlData[y].size(); x++) {
 			char tile = _lvlData[y][x]; //grab tile
 			glm::vec4 destRect(x*TILE_WIDTH, y*TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
@@ -24,37 +24,32 @@ Level::Level(const std::string& fileName) {
 			{
 			case 'B':
 			case 'R':
-				_spriteBatch.draw(destRect, 
+				_lvlBatch.pushBatch(destRect,
 								  uvRect, 
 								  SerraEngine::ResourceManager::getTexture("Textures/red_bricks.png").id, 
 								  0.0f, 
 								  SerraEngine::Color(255,255,255,255));
 				break;
 			case 'G':
-				_spriteBatch.draw(destRect,
+				_lvlBatch.pushBatch(destRect,
 								uvRect,
 								SerraEngine::ResourceManager::getTexture("Textures/glass.png").id,
 								0.0f,
 								SerraEngine::Color(255, 255, 255, 255));
 				break;
 			case 'L':
-				_spriteBatch.draw(destRect,
+				_lvlBatch.pushBatch(destRect,
 								uvRect,
 								SerraEngine::ResourceManager::getTexture("Textures/light_bricks.png").id,
 								0.0f,
 								SerraEngine::Color(255, 255, 255, 255));
 				break;
 			case '@':
-				_startPlayerPos = { x*TILE_WIDTH, y*TILE_WIDTH };
-				_spriteBatch.draw(destRect,
-								uvRect,
-								SerraEngine::ResourceManager::getTexture("Textures/circle.png").id,
-								0.0f,
-								SerraEngine::Color(255, 255, 255, 255));
+				_playerStartPos = { x*TILE_WIDTH, y*TILE_WIDTH };
 				break;
 			case 'Z':
 				_zombiesStartPosition.emplace_back(x*TILE_WIDTH, y*TILE_WIDTH);
-				_spriteBatch.draw(destRect,
+				_lvlBatch.pushBatch(destRect,
 								uvRect,
 								SerraEngine::ResourceManager::getTexture("Textures/circle.png").id,
 								0.0f,
@@ -69,13 +64,9 @@ Level::Level(const std::string& fileName) {
 		}
 	}
 
-	_spriteBatch.end();
-}
-
-Level::~Level()
-{
+	_lvlBatch.end();
 }
 
 void Level::draw() {
-	_spriteBatch.renderBatch();
+	_lvlBatch.renderBatch();
 }

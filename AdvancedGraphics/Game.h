@@ -3,7 +3,7 @@
 #include <SerraEngine/Window.h>
 #include <SerraEngine/Sprite.h>
 #include <SerraEngine/GLSLManager.h>
-#include <SerraEngine/FPSLimiter.h>
+#include <SerraEngine/Timing.h>
 #include <SerraEngine/Camera2D.h>
 #include <SerraEngine/SpriteBatch.h>
 #include <SerraEngine/InputManager.h>

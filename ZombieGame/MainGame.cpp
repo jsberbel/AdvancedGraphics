@@ -10,14 +10,17 @@ MainGame::MainGame(const std::string &name, int screenWidth, int screenHeight) :
 	_screenHeight(screenHeight),
 	_curLevel(0),
 	_window(screenWidth, screenHeight, name),
-	_camera(screenWidth, screenHeight) {}
+	_camera(screenWidth, screenHeight),
+	_player(nullptr) {}
 
 MainGame::~MainGame() {
 	for (auto l : _levels) delete l, l = nullptr;
+	for (auto h : _humans) delete h, h = nullptr;
 }
 
 void MainGame::run() {
 	initSystems();
+	initLevel();
 	gameLoop();
 }
 
@@ -26,12 +29,15 @@ void MainGame::initSystems() {
 	_window.createWindow({200, 200, 200, 255});
 	//glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
 	initShaders();
-	initLevel();
+	_agentsBatch.init();
 }
 
 void MainGame::initLevel() {
 	_levels.push_back(new Level("Levels/level1.txt"));
 	_curLevel = 0;
+
+	_player = new Player(_levels[_curLevel]->getStartPlayerPos(), 3.0f, _inputManager);
+	_humans.push_back(_player);
 }
 
 void MainGame::initShaders() {
@@ -43,14 +49,22 @@ void MainGame::initShaders() {
     _textureProgram.linkShaders();
 }
 
+void MainGame::updateAgents() {
+	//Update humans
+	for (auto h : _humans) h->update();
+	//Update zombies
+}
+
 void MainGame::gameLoop() {
 	SerraEngine::FPSLimiter fpsLimiter(120.0f);
 
 	while (_gameState != GameState::EXIT) {
 		fpsLimiter.begin();
-		processInput();
-		_camera.update();
-		drawGame();
+			processInput();
+			updateAgents();
+			_camera.setPosition(_player->getPosition());
+			_camera.update();
+			drawGame();
 		fpsLimiter.end();
 	}
 }
@@ -82,6 +96,13 @@ void MainGame::processInput() {
     }
 }
 
+void MainGame::drawAgents() {
+	_agentsBatch.begin();
+	for (auto h : _humans) h->pushBatch(_agentsBatch);
+	_agentsBatch.end();
+	_agentsBatch.renderBatch();
+}
+
 void MainGame::drawGame() {
     // Set the base depth to 1.0
     glClearDepth(1.0);
@@ -98,7 +119,11 @@ void MainGame::drawGame() {
 	glm::mat4 projectionMatrix = _camera.getCameraMatrix();
 	glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, &projectionMatrix[0][0]);
 
+	//Draw current level
 	_levels[_curLevel]->draw();
+
+	//Draw the agents
+	drawAgents();
    
 	_textureProgram.unbind();
 
