@@ -31,7 +31,7 @@ void FPSLimiter::calculateFPS() {
 	curFrame++;
 	if (count < NUM_SAMPLES) count = curFrame;
 	else count = NUM_SAMPLES;
-	if (curFrame == NUM_SAMPLES) curFrame = 0, std::cout << _fps << std::endl;
+	if (curFrame == NUM_SAMPLES) curFrame = 0/*, std::cout << _fps << std::endl*/;
 
 	float frameTimeAverage = 0;
 	for (int i = 0; i < count; i++) frameTimeAverage += frameTimes[i];
@@ -39,6 +39,12 @@ void FPSLimiter::calculateFPS() {
 
 	if (frameTimeAverage > 0) _fps = 1000.0f / frameTimeAverage;
 	else _fps = 60.0f;
+}
+
+void FPSLimiter::getFPS() const {
+	static int fpsTimer = 0;
+	if (fpsTimer == 10) fpsTimer = 0, std::cout << _fps << std::endl;
+	fpsTimer++;
 }
 
 void FPSLimiter::end() {

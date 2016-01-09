@@ -10,6 +10,7 @@ Level::Level(const std::string& fileName) {
 
 	std::string tmp;
 	file >> tmp >> _numHumans;
+	std::getline(file, tmp); //ignore first line
 	while (std::getline(file, tmp)) _lvlData.push_back(tmp);
 	
 	_lvlBatch.init();
@@ -45,9 +46,11 @@ Level::Level(const std::string& fileName) {
 								SerraEngine::Color(255, 255, 255, 255));
 				break;
 			case '@':
+				_lvlData[y][x] = '.'; //don't collide with @
 				_playerStartPos = { x*TILE_WIDTH, y*TILE_WIDTH };
 				break;
 			case 'Z':
+				_lvlData[y][x] = '.'; //don't collide with Z
 				_zombiesStartPosition.emplace_back(x*TILE_WIDTH, y*TILE_WIDTH);
 				_lvlBatch.pushBatch(destRect,
 								uvRect,

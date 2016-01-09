@@ -6,9 +6,10 @@
 #include <SerraEngine/SpriteBatch.h>
 #include "Player.h"
 #include "Level.h"
-#include <memory>
 
 #define PLAYER 0
+
+class Zombie;
 
 enum class GameState { PLAY, EXIT };
 
@@ -27,6 +28,7 @@ class MainGame
 
 	Player* _player;
 	std::vector<Human*> _humans; //vector of all humans
+	std::vector<Zombie*> _zombies;
 	
 	void initSystems();
 	void initLevel();

@@ -3,6 +3,9 @@
 #include <SerraEngine/Timing.h>
 #include <SDL/SDL.h>
 #include <iostream>
+#include <random>
+#include <ctime>
+#include "Zombie.h"
 
 MainGame::MainGame(const std::string &name, int screenWidth, int screenHeight) :
 	_gameState(GameState::PLAY),
@@ -37,7 +40,20 @@ void MainGame::initLevel() {
 	_curLevel = 0;
 
 	_player = new Player(_levels[_curLevel]->getStartPlayerPos(), 3.0f, _inputManager);
+	_player->initData(_levels[_curLevel]->getLevelData(), _humans, _zombies);
 	_humans.push_back(_player);
+	
+	std::mt19937 randomEngine;
+	randomEngine.seed((unsigned)time(nullptr));
+	std::uniform_int_distribution<int> randX(1, (int)_levels[_curLevel]->getWidth()-2);
+	std::uniform_int_distribution<int> randY(1, (int)_levels[_curLevel]->getHeight()-2);
+	const float HUMAN_SPEED = 1.0f;
+	
+	for (int i = 0; i < _levels[_curLevel]->getNumHumans(); i++) {
+		glm::vec2 newPos(randX(randomEngine)*TILE_WIDTH, randY(randomEngine)*TILE_WIDTH);
+		_humans.push_back(new Human(newPos, HUMAN_SPEED));
+		_humans.back()->initData(_levels[_curLevel]->getLevelData(), _humans, _zombies);
+	}
 }
 
 void MainGame::initShaders() {
@@ -65,6 +81,7 @@ void MainGame::gameLoop() {
 			_camera.setPosition(_player->getPosition());
 			_camera.update();
 			drawGame();
+			fpsLimiter.getFPS();
 		fpsLimiter.end();
 	}
 }
@@ -75,7 +92,7 @@ void MainGame::processInput() {
     while (SDL_PollEvent(&evnt)) {
         switch (evnt.type) {
             case SDL_QUIT:
-                // Exit the game here!
+				_gameState = GameState::EXIT;
                 break;
             case SDL_MOUSEMOTION:
                 _inputManager.setMouseCoords((float)evnt.motion.x, (float)evnt.motion.y);
@@ -94,6 +111,8 @@ void MainGame::processInput() {
                 break;
         }
     }
+
+	if (_inputManager.isKeyPressed(SDLK_ESCAPE)) _gameState = GameState::EXIT;
 }
 
 void MainGame::drawAgents() {

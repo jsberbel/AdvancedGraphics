@@ -19,6 +19,10 @@ public:
 	void draw();
 
 	//getters
+	inline int getWidth() const { return _lvlData[0].size(); };
+	inline int getHeight() const { return _lvlData.size(); };
+	inline int getNumHumans() const { return _numHumans; };
+	inline std::vector<std::string> &getLevelData() { return _lvlData; };
 	inline glm::vec2 getStartPlayerPos() const { return _playerStartPos; };
 	inline const std::vector<glm::vec2> &getStartZombiePos() const { return _zombiesStartPosition; };
 };

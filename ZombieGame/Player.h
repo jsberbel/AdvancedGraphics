@@ -10,8 +10,7 @@ class Player : public Human
 public:
 	Player() = default;
 	Player(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager);
-	~Player();
-	void init(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager);
-	void update();
+	~Player() = default;
+	void update(std::vector<Human*> &humans, std::vector<Zombie*> &zombies);
 };
 

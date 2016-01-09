@@ -5,21 +5,14 @@ Player::Player(const glm::vec2 & position, float speed, SerraEngine::InputManage
 	_inputManager(inputManager),
 	Human(position, speed, PLAYER_COLOR) {}
 
-Player::~Player()
-{
-}
+void Player::update(std::vector<Human*> &humans, std::vector<Zombie*> &zombies) {
+	static bool dirCol = false;
 
-void Player::init(const glm::vec2 &position, float speed, SerraEngine::InputManager &inputManager) {
-	 _inputManager = inputManager;
-	_position = position;
-	_speed = speed;
-	_color = PLAYER_COLOR;
-}
+	if (_inputManager.isKeyPressed(SDLK_w))		 _position.y += _speed, dirCol = true;
+	else if (_inputManager.isKeyPressed(SDLK_s)) _position.y -= _speed, dirCol = false;
 
-void Player::update() {
-	if (_inputManager.isKeyPressed(SDLK_w))		_position.y += _speed;
-	else if (_inputManager.isKeyPressed(SDLK_s)) _position.y -= _speed;
-
-	if (_inputManager.isKeyPressed(SDLK_a))		_position.x -= _speed;
+	if (_inputManager.isKeyPressed(SDLK_a))		 _position.x -= _speed;
 	else if (_inputManager.isKeyPressed(SDLK_d)) _position.x += _speed;
+
+	collideWithLevel(dirCol);
 }

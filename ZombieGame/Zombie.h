@@ -4,7 +4,7 @@
 class Zombie : public Agent
 {
 public:
-	Zombie();
+	Zombie() = default;
 	~Zombie();
 	void update() {};
 };
