@@ -10,33 +10,34 @@ class Human;
 class Agent
 {
 protected:
-	static const float AGENT_WIDTH;
-
 	glm::vec2 _position;
 	float _speed;
 	SerraEngine::Color _color;
-	std::vector<std::string> *_lvlData;
-	std::vector<Human*> *_humans;
-	std::vector<Zombie*> *_zombies;
-		
-	void checkTilePosition(std::vector<glm::vec2> &ctPositions, float x, float y);
+	float _health;
+
+	void checkTilePosition(const std::vector<std::string>& levelData, std::vector<glm::vec2> &collideTilePositions, float x, float y);
 	void AABBCollideWithTile(glm::vec2 tilePos);
 public:
-	Agent() = default;
-	Agent(const glm::vec2 &position, float speed, const SerraEngine::Color &color);
-	~Agent();
+	static const float AGENT_WIDTH;
+	static const float AGENT_RADIUS;
 
-	void initData(std::vector<std::string>& lvlData, std::vector<Human*> &humans, std::vector<Zombie*> &zombies);
-	virtual void update() = 0;
+	Agent() = default;
+	Agent(const glm::vec2 &position, float speed, const SerraEngine::Color &color = { 255, 255, 255, 255 });
+	virtual ~Agent() = default;
+
+	virtual void update(const std::vector<std::string>& lvlData = std::vector<std::string>(),
+						std::vector<Human*>& humans = std::vector<Human*>(),
+						std::vector<Zombie*>& zombies = std::vector<Zombie*>()) = 0;
 	void pushBatch(SerraEngine::SpriteBatch &spriteBatch);
-	bool collideWithLevel(bool dirCol);
-	void collideWithAgents();
+	bool collideWithLevel(const std::vector<std::string>& lvlData, bool dirCol);
+	bool collideWithAgent(Agent* agent);
+	bool applyDamage(float damage); //return true if dead
 
 	//getters
 	inline const glm::vec2 &getPosition() const { return _position; };
 	inline float getSpeed() const { return _speed; };
 
 	//setters
-	//inline void setPosition(const glm::vec2 &position) const { _position = position; };
+	//inline void setPosition(const glm::vec2 &position) { _position = position; };
 	//inline void setSpeed(float speed) const { return _speed = speed; };
 };

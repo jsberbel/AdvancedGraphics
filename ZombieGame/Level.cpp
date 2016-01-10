@@ -3,6 +3,8 @@
 #include <SerraEngine/ResourceManager.h>
 #include <fstream>
 
+const int Level::TILE_WIDTH = 64;
+
 Level::Level(const std::string& fileName) {
 	std::ifstream file;
 	file.open(fileName);
@@ -51,12 +53,7 @@ Level::Level(const std::string& fileName) {
 				break;
 			case 'Z':
 				_lvlData[y][x] = '.'; //don't collide with Z
-				_zombiesStartPosition.emplace_back(x*TILE_WIDTH, y*TILE_WIDTH);
-				_lvlBatch.pushBatch(destRect,
-								uvRect,
-								SerraEngine::ResourceManager::getTexture("Textures/circle.png").id,
-								0.0f,
-								SerraEngine::Color(255, 255, 255, 255));
+				_zombiesStartPositions.emplace_back(x*TILE_WIDTH, y*TILE_WIDTH);
 				break;
 			case '.':
 				break;

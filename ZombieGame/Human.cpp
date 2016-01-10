@@ -5,19 +5,21 @@
 
 const int Human::MAX_FRAMES = 30;
 
-Human::Human(const glm::vec2 & position, float speed, const SerraEngine::Color& color) :
+Human::Human(const glm::vec2 & position, float speed, const SerraEngine::Color &color) :
 	_frames(0),
-	Agent(position, speed, color) 
+	Agent(position, speed, color)
 {
+	_health = 20;
+
 	static std::mt19937 randomEngine((unsigned)time(nullptr));
 	static std::uniform_real_distribution<float> randDir(-1.0f, 1.0f);
 
 	_direction = { randDir(randomEngine), randDir(randomEngine) };
-	if (_direction.length() == 0) _direction = { 1.0f, 0.0f };
+	if (glm::length(_direction)) _direction = { 1.0f, 0.0f };
 	_direction = glm::normalize(_direction);
 }
 
-void Human::update() {
+void Human::update(const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
 	static bool dirCol = false;
 	glm::vec2 prevPos = _position;
 	_position += _direction*_speed;
@@ -31,5 +33,5 @@ void Human::update() {
 
 	if (_position.y > prevPos.y) dirCol = true;
 	else dirCol = false;
-	if (collideWithLevel(dirCol)) _direction = glm::rotate(_direction, randRot(randomEngine));
+	if (collideWithLevel(lvlData, dirCol)) _direction = glm::rotate(_direction, randRot(randomEngine));
 }
