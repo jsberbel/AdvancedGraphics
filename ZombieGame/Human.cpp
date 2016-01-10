@@ -24,11 +24,10 @@ void Human::update(const std::vector<std::string>& lvlData, std::vector<Human*>&
 	glm::vec2 prevPos = _position;
 	_position += _direction*_speed;
 
-	static const float PI = 3.14159265359f;
 	static std::mt19937 randomEngine((unsigned)time(nullptr));
-	static std::uniform_real_distribution<float> randRot(-40.0f * PI / 180, 40.0f * PI / 180);
+	static std::uniform_real_distribution<float> randRot(-40.0f, 40.0f);
 
-	if(_frames >= MAX_FRAMES) _direction = glm::rotate(_direction, randRot(randomEngine)), _frames = 0;
+	if(_frames >= MAX_FRAMES) _direction = glm::rotate(_direction, glm::radians(randRot(randomEngine))), _frames = 0;
 	else _frames++;
 
 	if (_position.y > prevPos.y) dirCol = true;
