@@ -27,6 +27,6 @@ namespace SerraEngine {
 	public:
 		GLWindow(int sw = 600, int sh = 600, const std::string &name = "");
 		~GLWindow();
-		void createWindow(const Color& c = { 255, 255, 255, 255 }, const unsigned &curFlags = 0);
+		void createWindow(const ColorRGBA8& c = { 255, 255, 255, 255 }, const unsigned &curFlags = 0);
 	};
 }

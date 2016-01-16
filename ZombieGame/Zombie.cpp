@@ -1,19 +1,19 @@
 #include "Zombie.h"
 #include "Human.h"
 
-Zombie::Zombie(const glm::vec2 & position, float speed, const SerraEngine::Color & color) :
+Zombie::Zombie(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 & color) :
 	Agent(position, speed, color) {
 	_health = 150;
 }
 
-void Zombie::update(const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Zombie::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
 	static bool dirCol = false;
 	glm::vec2 prevPos = _position;
 	
 	Human* closestHuman = getNearestHuman(humans);
 	if (closestHuman != nullptr) {
 		glm::vec2 direction = glm::normalize(closestHuman->getPosition() - _position);
-		_position += direction*_speed;
+		_position += direction*_speed*deltaTime;
 	}
 
 	if (_position.y > prevPos.y) dirCol = true;

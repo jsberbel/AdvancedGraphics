@@ -43,7 +43,7 @@ namespace SerraEngine {
 		SDL_Quit();
 	};
 
-	void GLWindow::createWindow(const Color& c, const unsigned &curFlags) {
+	void GLWindow::createWindow(const ColorRGBA8& c, const unsigned &curFlags) {
 		Uint32 flags = SDL_WINDOW_OPENGL;
 		if (curFlags & INVISIBLE) flags |= SDL_WINDOW_HIDDEN;
 		else if (curFlags & FULLSCREEN) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;

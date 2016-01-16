@@ -14,9 +14,10 @@ enum class GameState { PLAY, EXIT };
 
 class MainGame
 {
-	static const float PLAYER_SPEED;
-	static const float HUMAN_SPEED;
-	static const float ZOMBIE_SPEED;
+	const float DESIRED_FPS = 120.0f;
+	const float PLAYER_SPEED = 4.0f;
+	const float HUMAN_SPEED = 1.5f;
+	const float ZOMBIE_SPEED = 1.8f;
 
 	std::vector<Level*> _levels; //List of all levels
 	GameState _gameState;
@@ -40,8 +41,8 @@ class MainGame
 	void initSystems();
 	void initLevel();
 	void initShaders();
-	void updateAgents();
-	void updateBullets();
+	void updateAgents(float deltaTime);
+	void updateBullets(float deltaTime);
 	void updateGame();
 	void gameLoop();
 	void processInput();

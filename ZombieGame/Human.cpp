@@ -5,7 +5,7 @@
 
 const int Human::MAX_FRAMES = 30;
 
-Human::Human(const glm::vec2 & position, float speed, const SerraEngine::Color &color) :
+Human::Human(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color) :
 	_frames(0),
 	Agent(position, speed, color)
 {
@@ -19,10 +19,10 @@ Human::Human(const glm::vec2 & position, float speed, const SerraEngine::Color &
 	_direction = glm::normalize(_direction);
 }
 
-void Human::update(const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Human::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
 	static bool dirCol = false;
 	glm::vec2 prevPos = _position;
-	_position += _direction*_speed;
+	_position += _direction*_speed*deltaTime;
 
 	static std::mt19937 randomEngine((unsigned)time(nullptr));
 	static std::uniform_real_distribution<float> randRot(-40.0f, 40.0f);

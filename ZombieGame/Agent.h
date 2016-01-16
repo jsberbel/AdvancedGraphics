@@ -12,7 +12,7 @@ class Agent
 protected:
 	glm::vec2 _position;
 	float _speed;
-	SerraEngine::Color _color;
+	SerraEngine::ColorRGBA8 _color;
 	float _health;
 
 	void checkTilePosition(const std::vector<std::string>& levelData, std::vector<glm::vec2> &collideTilePositions, float x, float y);
@@ -22,16 +22,17 @@ public:
 	static const float AGENT_RADIUS;
 
 	Agent() = default;
-	Agent(const glm::vec2 &position, float speed, const SerraEngine::Color &color = { 255, 255, 255, 255 });
+	Agent(const glm::vec2 &position, float speed, const SerraEngine::ColorRGBA8 &color = { 255, 255, 255, 255 });
 	virtual ~Agent() = default;
 
-	virtual void update(const std::vector<std::string>& lvlData = std::vector<std::string>(),
+	virtual void update(float deltaTime = 0,
+						const std::vector<std::string>& lvlData = std::vector<std::string>(),
 						std::vector<Human*>& humans = std::vector<Human*>(),
 						std::vector<Zombie*>& zombies = std::vector<Zombie*>()) = 0;
 	void pushBatch(SerraEngine::SpriteBatch &spriteBatch);
 	bool collideWithLevel(const std::vector<std::string>& lvlData, bool dirCol);
 	bool collideWithAgent(Agent* agent);
-	bool applyDamage(float damage); //return true if dead
+	bool applyDamage(int damage); //return true if dead
 
 	//getters
 	inline const glm::vec2 &getPosition() const { return _position; };

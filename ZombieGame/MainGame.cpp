@@ -6,13 +6,9 @@
 #include <iostream>
 #include <random>
 #include <ctime>
-#include <iterator>
+#include <algorithm>
 #include "Zombie.h"
 #include "Gun.h"
-
-const float MainGame::PLAYER_SPEED = 4.0f;
-const float MainGame::HUMAN_SPEED = 1.5f;
-const float MainGame::ZOMBIE_SPEED = 1.8f;
 
 MainGame::MainGame(const std::string &name, int screenWidth, int screenHeight) :
 	_gameState(GameState::PLAY),
@@ -48,6 +44,7 @@ void MainGame::initSystems() {
 
 void MainGame::initLevel() {
 	_levels.push_back(new Level("Levels/level1.txt"));
+	_levels.push_back(new Level("Levels/level2.txt"));
 	_curLevel = 0;
 
 	_player = new Player(_levels[_curLevel]->getStartPlayerPos(), PLAYER_SPEED, _inputManager, _camera, _bullets);
@@ -87,9 +84,9 @@ void MainGame::initShaders() {
     _textureProgram.linkShaders();
 }
 
-void MainGame::updateAgents() {
+void MainGame::updateAgents(float deltaTime) {
 	//Update humans
-	for (auto h : _humans) h->update(_levels[_curLevel]->getLevelData());
+	for (auto h : _humans) h->update(deltaTime, _levels[_curLevel]->getLevelData());
 	/*for (auto i = _humans.begin(), end = _humans.end(); i != end; ++i) {
 		for (auto j = std::next(i, 1), end = _humans.end(); j != end; ++j) {
 			(*i)->collideWithAgent(*j);
@@ -102,7 +99,7 @@ void MainGame::updateAgents() {
 	}
 
 	//Update zombies
-	for (auto z : _zombies) z->update(_levels[_curLevel]->getLevelData(), _humans);
+	for (auto z : _zombies) z->update(deltaTime, _levels[_curLevel]->getLevelData(), _humans);
 	for (unsigned i = 0; i < _zombies.size(); i++) {
 		for (unsigned j = i+1; j < _zombies.size(); j++) {
 			_zombies[i]->collideWithAgent(_zombies[j]);
@@ -127,10 +124,10 @@ void MainGame::updateAgents() {
 	//std::cout << "humans: " << _humans.size() << std::endl;
 }
 
-void MainGame::updateBullets() {
+void MainGame::updateBullets(float deltaTime) {
 	// Update and collide with world
 	for (unsigned i = 0; i < _bullets.size();) {
-		if (_bullets[i].update(_levels[_curLevel]->getLevelData())) {
+		if (_bullets[i].update(deltaTime, _levels[_curLevel]->getLevelData())) {
 			_bullets[i] = _bullets.back();
 			_bullets.pop_back();
 		}
@@ -181,14 +178,27 @@ void MainGame::updateBullets() {
 }
 
 void MainGame::updateGame() {
-	updateAgents();
-	updateBullets();
+	const float DESIRED_FRAMERATE = 1000.0f / DESIRED_FPS;
+	const float MAX_DELTATIME = 1.0f;
+	const int MAX_PHYSICS_STEPS = 6;
+
+	static float prevTicks = (float)SDL_GetTicks();
+	float curTicks = (float)SDL_GetTicks();
+	float frameTime = curTicks - prevTicks;
+	prevTicks = curTicks;
+	float totalDeltaTime = frameTime / DESIRED_FRAMERATE;
+	for (int i = 0; totalDeltaTime > 0.0f && i < MAX_PHYSICS_STEPS; i++) {
+		float deltaTime = std::min(totalDeltaTime, MAX_DELTATIME);
+		updateAgents(deltaTime);
+		updateBullets(deltaTime);
+		totalDeltaTime -= deltaTime;
+	}
 	_camera.setPosition(_player->getPosition() + Agent::AGENT_RADIUS);
 	_camera.update();
 }
 
 void MainGame::gameLoop() {
-	SerraEngine::FPSLimiter fpsLimiter(120.0f);
+	SerraEngine::FPSLimiter fpsLimiter(DESIRED_FPS);
 
 	while (_gameState != GameState::EXIT) {
 		fpsLimiter.begin();
@@ -203,8 +213,9 @@ void MainGame::gameLoop() {
 
 void MainGame::processInput() {
     SDL_Event evnt;
-	bool zoomOut = false;
-	bool zoomIn = false;
+	bool zoomOut = false, zoomIn = false;
+
+	_inputManager.update();
 
     //Will keep looping until there are no more events to process
     while (SDL_PollEvent(&evnt)) {
@@ -234,9 +245,9 @@ void MainGame::processInput() {
         }
     }
 
-	if (_inputManager.isKeyPressed(SDLK_ESCAPE)) _gameState = GameState::EXIT;
+	if (_inputManager.isKeyDown(SDLK_ESCAPE)) _gameState = GameState::EXIT;
 
-	static float camScale = 1.0f;
+	static float camScale = _camera.getScale();
 	if (camScale > 0.1f && zoomOut) camScale -= 0.02f;
 	if (camScale < 2.0f && zoomIn) camScale += 0.02f;
 	_camera.setScale(camScale);

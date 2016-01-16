@@ -8,9 +8,10 @@ class Human : public Agent
 	static const int MAX_FRAMES;
 public:
 	Human() = default;
-	Human(const glm::vec2 & position, float speed, const SerraEngine::Color &color = { 30, 125, 20, 255 });
+	Human(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color = { 30, 125, 20, 255 });
 	virtual ~Human() = default;
-	virtual void update(const std::vector<std::string>& lvlData = std::vector<std::string>(),
+	virtual void update(float deltaTime = 0, 
+						const std::vector<std::string>& lvlData = std::vector<std::string>(),
 						std::vector<Human*>& humans = std::vector<Human*>(),
 						std::vector<Zombie*>& zombies = std::vector<Zombie*>()) override;
 };

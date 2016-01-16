@@ -11,14 +11,14 @@ class Gun
 	float _spread;			// Accuracy
 	float _bulletSpeed;
 	int _bulletDamage;
-	int _frameCounter;
+	float _frameCounter;
 
 	void fire(const glm::vec2 & position, const glm::vec2 & direction, std::vector<Bullet> &bullets);
 public:
 	Gun() = default;
 	Gun(const std::string &name, int fireRate, int bulletPerShot, float spread, float _bulletSpeed, int _bulletDamage);
 	~Gun() = default;
-	void update(bool isMouseDown, const glm::vec2 & position, const glm::vec2 & direction, std::vector<Bullet>& bullets);
+	void update(bool isMouseDown, const glm::vec2 & position, const glm::vec2 & direction, std::vector<Bullet>& bullets, float deltaTime);
 	
 };
 

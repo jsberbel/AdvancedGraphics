@@ -10,17 +10,14 @@ namespace SerraEngine {
 		Position() = default;
 	};
 
-	struct Color {
+	struct ColorRGBA8 {
 		GLubyte r;
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
-		Color() = default;
-		Color(GLubyte r_, GLubyte g_, GLubyte b_, GLubyte a_) :
-			r(r_),
-			g(g_),
-			b(b_),
-			a(a_) {};
+		ColorRGBA8() : r(0), g(0), b(0), a(0) {};
+		ColorRGBA8(GLubyte r_, GLubyte g_, GLubyte b_, GLubyte a_) :
+			r(r_), g(g_), b(b_), a(a_) {};
 	};
 
 	struct UV {
@@ -31,7 +28,7 @@ namespace SerraEngine {
 
 	struct Vertex {
 		Position position;
-		Color color;
+		ColorRGBA8 color;
 		UV uv;
 		void setPosition(GLfloat x, GLfloat y) {
 			position.x = x;
@@ -46,7 +43,7 @@ namespace SerraEngine {
 			color.b = b;
 			color.a = a;
 		};
-		void setColor(Color color_) {
+		void setColor(ColorRGBA8 color_) {
 			color = color_;
 		};
 		void setUV(GLfloat u, GLfloat v) {

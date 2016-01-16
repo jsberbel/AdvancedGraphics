@@ -6,14 +6,14 @@
 
 const int Bullet::BULLET_RADIUS = 5;
 
-Bullet::Bullet(const glm::vec2 &position, const glm::vec2 &direction, float speed, float damage) :
+Bullet::Bullet(const glm::vec2 &position, const glm::vec2 &direction, float speed, int damage) :
 	_position(position),
 	_direction(direction),
 	_speed(speed),
 	_damage(damage) {}
 
-bool Bullet::update(const std::vector<std::string> &lvlData) {
-	_position += _direction*_speed;
+bool Bullet::update(float deltaTime, const std::vector<std::string> &lvlData) {
+	_position += _direction*_speed*deltaTime;
 	return collideWithLevel(lvlData);
 }
 

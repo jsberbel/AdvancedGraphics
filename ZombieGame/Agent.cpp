@@ -6,7 +6,7 @@
 const float Agent::AGENT_WIDTH = 60.0f;
 const float Agent::AGENT_RADIUS = Agent::AGENT_WIDTH / 2.0f;
 
-Agent::Agent(const glm::vec2 & position, float speed, const SerraEngine::Color &color) :
+Agent::Agent(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color) :
 	_position(position),
 	_speed(speed),
 	_color(color) {}
@@ -58,7 +58,7 @@ bool Agent::collideWithAgent(Agent* agent) {
 	return false;
 }
 
-bool Agent::applyDamage(float damage) {
+bool Agent::applyDamage(int damage) {
 	_health -= damage;
 	if (_health <= 0) return true;
 	return false;

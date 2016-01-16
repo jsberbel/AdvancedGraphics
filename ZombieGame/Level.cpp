@@ -31,21 +31,21 @@ Level::Level(const std::string& fileName) {
 								  uvRect, 
 								  SerraEngine::ResourceManager::getTexture("Textures/red_bricks.png").id, 
 								  0.0f, 
-								  SerraEngine::Color(255,255,255,255));
+								  SerraEngine::ColorRGBA8(255,255,255,255));
 				break;
 			case 'G':
 				_lvlBatch.pushBatch(destRect,
 								uvRect,
 								SerraEngine::ResourceManager::getTexture("Textures/glass.png").id,
 								0.0f,
-								SerraEngine::Color(255, 255, 255, 255));
+								SerraEngine::ColorRGBA8(255, 255, 255, 255));
 				break;
 			case 'L':
 				_lvlBatch.pushBatch(destRect,
 								uvRect,
 								SerraEngine::ResourceManager::getTexture("Textures/light_bricks.png").id,
 								0.0f,
-								SerraEngine::Color(255, 255, 255, 255));
+								SerraEngine::ColorRGBA8(255, 255, 255, 255));
 				break;
 			case '@':
 				_lvlData[y][x] = '.'; //don't collide with @

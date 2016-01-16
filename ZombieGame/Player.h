@@ -20,7 +20,8 @@ public:
 	Player() = default;
 	Player(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager, SerraEngine::Camera2D &camera, std::vector<Bullet> &bullets);
 	~Player();
-	void update(const std::vector<std::string>& lvlData = std::vector<std::string>(),
+	void update(float deltaTime = 0,
+				const std::vector<std::string>& lvlData = std::vector<std::string>(),
 				std::vector<Human*>& humans = std::vector<Human*>(),
 				std::vector<Zombie*>& zombies = std::vector<Zombie*>()) override;
 	void addGun(Gun* gun);
