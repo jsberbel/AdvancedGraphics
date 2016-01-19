@@ -11,13 +11,23 @@
 #include "Gun.h"
 
 MainGame::MainGame(const std::string &name, int screenWidth, int screenHeight) :
+	_levels(),
 	_gameState(GameState::PLAY),
 	_screenWidth(screenWidth),
 	_screenHeight(screenHeight),
 	_curLevel(0),
 	_window(screenWidth, screenHeight, name),
+	_textureProgram(),
+	_inputManager(),
 	_camera(screenWidth, screenHeight),
+	_HUDcamera(screenWidth, screenHeight),
+	_agentsBatch(),
+	_HUDBatch(),
+	_spriteFont(nullptr),
 	_player(nullptr),
+	_humans(),
+	_zombies(),
+	_bullets(),
 	_numHumansKilled(0),
 	_numZombiesKilled(0) {}
 
@@ -37,9 +47,12 @@ void MainGame::run() {
 void MainGame::initSystems() {
 	SerraEngine::init();
 	_window.createWindow({200, 200, 200, 255});
-	//glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	initShaders();
 	_agentsBatch.init();
+	_HUDBatch.init();
+	_HUDcamera.setPosition(glm::vec2(_screenWidth*0.5f, _screenHeight*0.5f));
+	_spriteFont = std::make_unique<SerraEngine::SpriteFont>("Fonts/ComickBook_Simple.ttf", 64);
 }
 
 void MainGame::initLevel() {
@@ -195,6 +208,7 @@ void MainGame::updateGame() {
 	}
 	_camera.setPosition(_player->getPosition() + Agent::AGENT_RADIUS);
 	_camera.update();
+	_HUDcamera.update();
 }
 
 void MainGame::gameLoop() {
@@ -247,7 +261,7 @@ void MainGame::processInput() {
 
 	if (_inputManager.isKeyDown(SDLK_ESCAPE)) _gameState = GameState::EXIT;
 
-	static float camScale = _camera.getScale();
+	static float camScale = _camera.getScale()*0.5f;
 	if (camScale > 0.1f && zoomOut) camScale -= 0.02f;
 	if (camScale < 2.0f && zoomIn) camScale += 0.02f;
 	_camera.setScale(camScale);
@@ -276,19 +290,37 @@ void MainGame::drawGame() {
 	_agentsBatch.begin();
 
 	//Draw the agents
-	for (auto h : _humans) h->pushBatch(_agentsBatch);
-	for (auto z : _zombies) z->pushBatch(_agentsBatch);
+	const glm::vec2 agentDims(Agent::AGENT_RADIUS*2.0f);
+	for (auto h : _humans) {
+		if (_camera.isBoxInView(h->getPosition(), agentDims)) h->pushBatch(_agentsBatch);
+ 	}
+	for (auto z : _zombies) if (_camera.isBoxInView(z->getPosition(), agentDims)) z->pushBatch(_agentsBatch);
 
 	//Draw bullets
 	for (auto &b : _bullets) b.pushBatch(_agentsBatch);
 
 	_agentsBatch.end();
 	_agentsBatch.renderBatch();
+
+	drawHUD();
    
 	_textureProgram.unbind();
 
     // Swap our buffer and draw everything to the screen!
     _window.swapBuffer();
+}
+
+void MainGame::drawHUD() {
+	char buffer[256];
+	GLint projectionUniform = _textureProgram.getUniformLocation("P");
+	glm::mat4 projectionMatrix = _HUDcamera.getCameraMatrix();
+	glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, &projectionMatrix[0][0]);
+	_HUDBatch.begin();
+		sprintf_s(buffer, "Num humans: %d", _humans.size());
+		_spriteFont->draw(_HUDBatch, buffer, glm::vec2(50, 50), glm::vec2(0.5f), 0.0f,
+			SerraEngine::ColorRGBA8(255,255,255,255));
+	_HUDBatch.end();
+	_HUDBatch.renderBatch();
 }
 
 void MainGame::checkEndGame() {

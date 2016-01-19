@@ -4,6 +4,7 @@
 #include <SerraEngine/Camera2D.h>
 #include <SerraEngine/InputManager.h>
 #include <SerraEngine/SpriteBatch.h>
+#include <SerraEngine/SpriteFont.h>
 #include "Player.h"
 #include "Level.h"
 #include "Bullet.h"
@@ -28,7 +29,10 @@ class MainGame
 	SerraEngine::GLSLManager _textureProgram; // The shader program
 	SerraEngine::InputManager _inputManager; // Handles input
 	SerraEngine::Camera2D _camera; // Main Camera
+	SerraEngine::Camera2D _HUDcamera;
 	SerraEngine::SpriteBatch _agentsBatch;
+	SerraEngine::SpriteBatch _HUDBatch;
+	std::unique_ptr<SerraEngine::SpriteFont> _spriteFont;
 
 	Player* _player;
 	std::vector<Human*> _humans; //vector of all humans
@@ -47,6 +51,7 @@ class MainGame
 	void gameLoop();
 	void processInput();
 	void drawGame();
+	void drawHUD();
 	void checkEndGame();
 public:
     MainGame(const std::string &name, int screenWidth, int screenHeight);

@@ -20,6 +20,7 @@ public:
 	void init(int screenWidth, int screenHeight);
 	void update();
 	glm::vec2 convertScreenToWorld(glm::vec2 screenCoords);
+	bool isBoxInView(const glm::vec2 &position, const glm::vec2 &dimensions);
 
 	//setters
 	inline void setPosition(const glm::vec2 &newPos) { _position = newPos; _needsMatrixUpdate = true; };

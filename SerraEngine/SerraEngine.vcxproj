@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="ErrorManager.h" />
+    <ClInclude Include="SpriteFont.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="GLSLManager.h" />
     <ClInclude Include="GLTexture.h" />
@@ -193,6 +194,7 @@
   <ItemGroup>
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="ErrorManager.cpp" />
+    <ClCompile Include="SpriteFont.cpp" />
     <ClCompile Include="Timing.cpp" />
     <ClCompile Include="GLSLManager.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
