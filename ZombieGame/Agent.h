@@ -21,14 +21,13 @@ public:
 	static const float AGENT_WIDTH;
 	static const float AGENT_RADIUS;
 
-	Agent() = default;
-	Agent(const glm::vec2 &position, float speed, const SerraEngine::ColorRGBA8 &color = { 255, 255, 255, 255 });
+	explicit Agent() = default;
+	explicit Agent(const glm::vec2 &position, float speed, const SerraEngine::ColorRGBA8 &color = SerraEngine::ColorRGBA8{ 255, 255, 255, 255 });
 	virtual ~Agent() = default;
 
-	virtual void update(float deltaTime = 0,
+	virtual void update(float deltaTime = 0.0f,
 						const std::vector<std::string>& lvlData = std::vector<std::string>(),
-						std::vector<Human*>& humans = std::vector<Human*>(),
-						std::vector<Zombie*>& zombies = std::vector<Zombie*>()) = 0;
+						std::vector<Human*>& humans = std::vector<Human*>()) = 0;
 	void pushBatch(SerraEngine::SpriteBatch &spriteBatch);
 	bool collideWithLevel(const std::vector<std::string>& lvlData, bool dirCol);
 	bool collideWithAgent(Agent* agent);

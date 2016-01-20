@@ -21,9 +21,9 @@ class MainGame
 	const float ZOMBIE_SPEED = 1.8f;
 
 	std::vector<Level*> _levels; //List of all levels
-	GameState _gameState;
 	int _screenWidth, _screenHeight;
-	int _curLevel;
+	GameState _gameState = GameState::PLAY;
+	int _curLevel = 0;
 
 	SerraEngine::GLWindow _window; // The game window
 	SerraEngine::GLSLManager _textureProgram; // The shader program
@@ -39,8 +39,8 @@ class MainGame
 	std::vector<Zombie*> _zombies; //vector of all zombies
 	std::vector<Bullet> _bullets; //vector of all bullets
 
-	int _numHumansKilled;
-	int _numZombiesKilled;
+	int _numHumansKilled = 0;
+	int _numZombiesKilled = 0;
 	
 	void initSystems();
 	void initLevel();

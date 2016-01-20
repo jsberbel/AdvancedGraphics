@@ -14,8 +14,8 @@ namespace SerraEngine {
 		int _screenWidth;
 		int _screenHeight;
 	public:
-		Window(int sw = 600, int sh = 600, const std::string &name = "");
-		~Window();
+		explicit Window(int sw = 600, int sh = 600, const std::string &name = "");
+		virtual ~Window();
 		virtual void createWindow(const unsigned &curFlags = 0);
 		inline void changeSize(const int &sw, const int &sh) const { SDL_SetWindowSize(_SDLWindow, sw, sh); };
 		inline SDL_Window* getWindow() const { return _SDLWindow; };
@@ -25,8 +25,8 @@ namespace SerraEngine {
 	class GLWindow : public Window {
 		SDL_GLContext glContext;
 	public:
-		GLWindow(int sw = 600, int sh = 600, const std::string &name = "");
+		explicit GLWindow(int sw = 600, int sh = 600, const std::string &name = "");
 		~GLWindow();
-		void createWindow(const ColorRGBA8& c = { 255, 255, 255, 255 }, const unsigned &curFlags = 0);
+		void createWindow(const ColorRGBA8& c = ColorRGBA8{ 255, 255, 255, 255 }, const unsigned &curFlags = 0);
 	};
 }

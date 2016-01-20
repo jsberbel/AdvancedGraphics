@@ -7,7 +7,7 @@ namespace SerraEngine {
 	struct Position {
 		GLfloat x;
 		GLfloat y;
-		Position() = default;
+		explicit Position() = default;
 	};
 
 	struct ColorRGBA8 {
@@ -15,15 +15,15 @@ namespace SerraEngine {
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
-		ColorRGBA8() : r(0), g(0), b(0), a(0) {};
-		ColorRGBA8(GLubyte r_, GLubyte g_, GLubyte b_, GLubyte a_) :
+		explicit ColorRGBA8() : r(0), g(0), b(0), a(0) {};
+		explicit ColorRGBA8(GLubyte r_, GLubyte g_, GLubyte b_, GLubyte a_) :
 			r(r_), g(g_), b(b_), a(a_) {};
 	};
 
 	struct UV {
 		GLfloat u;
 		GLfloat v;
-		UV() = default;
+		explicit UV() = default;
 	};
 
 	struct Vertex {
@@ -53,6 +53,6 @@ namespace SerraEngine {
 		void setUV(UV uv_) {
 			uv = uv_;
 		};
-		Vertex() = default;
+		explicit Vertex() = default;
 	};
 }

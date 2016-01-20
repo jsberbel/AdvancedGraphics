@@ -1,6 +1,7 @@
 #include "Human.h"
 #include <random>
 #include <ctime>
+#define GLM_FORCE_RADIANS
 #include <glm/gtx/rotate_vector.hpp>
 
 const int Human::MAX_FRAMES = 30;
@@ -19,7 +20,7 @@ Human::Human(const glm::vec2 & position, float speed, const SerraEngine::ColorRG
 	_direction = glm::normalize(_direction);
 }
 
-void Human::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Human::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans) {
 	static bool dirCol = false;
 	glm::vec2 prevPos = _position;
 	_position += _direction*_speed*deltaTime;

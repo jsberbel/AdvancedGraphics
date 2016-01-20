@@ -13,8 +13,8 @@ class FPSLimiter
 
 	void calculateFPS();
 public:
-	FPSLimiter();
-	FPSLimiter(float targetFPS);
+	explicit FPSLimiter();
+	explicit FPSLimiter(float targetFPS);
 	~FPSLimiter() = default;
 
 	inline void setTargetFPS(float targetFPS) { _targetFPS = targetFPS; };

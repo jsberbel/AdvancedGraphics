@@ -21,7 +21,7 @@ void Bullet::pushBatch(SerraEngine::SpriteBatch & spriteBatch) {
 	glm::vec4 destRect(_position.x + BULLET_RADIUS, _position.y + BULLET_RADIUS, BULLET_RADIUS * 2, BULLET_RADIUS * 2);
 	const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static int textureID = SerraEngine::ResourceManager::getTexture("Textures/circle.png").id;
-	spriteBatch.pushBatch(destRect, uvRect, textureID, 0.0f, {75, 75, 75, 255});
+	spriteBatch.pushBatch(destRect, uvRect, textureID, 0.0f, SerraEngine::ColorRGBA8{75, 75, 75, 255});
 }
 
 bool Bullet::collideWithAgent(Agent * agent) {

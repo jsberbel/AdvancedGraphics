@@ -11,7 +11,7 @@ namespace SerraEngine {
 		int _numAttributes;
 		void compileShader(const std::string &filePath, GLuint id);
 	public:
-		GLSLManager();
+		explicit GLSLManager();
 		~GLSLManager();
 		void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
 		void linkShaders();

@@ -18,8 +18,8 @@ class Bullet
 	
 	bool collideWithLevel(const std::vector<std::string> &lvlData);
 public:
-	Bullet() = default;
-	Bullet(const glm::vec2 &position, const glm::vec2 &direction, float speed, int damage);
+	explicit Bullet() = default;
+	explicit Bullet(const glm::vec2 &position, const glm::vec2 &direction, float speed, int damage);
 	~Bullet() = default;
 	bool update(float deltaTime, const std::vector<std::string> &lvlData);
 	void pushBatch(SerraEngine::SpriteBatch &spriteBatch);

@@ -15,7 +15,7 @@ namespace SerraEngine {
 		GLuint _vboID;
 		GLTexture _texture;
 	public:
-		Sprite();
+		explicit Sprite();
 		Sprite(float x, float y, float w, float h, const std::string &texturePath);
 		~Sprite();
 

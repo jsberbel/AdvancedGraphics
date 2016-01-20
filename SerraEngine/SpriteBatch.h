@@ -22,8 +22,8 @@ public:
 	Vertex topRight;
 	Vertex bottomRight;
 
-	Glyph() = default;
-	Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color) :
+	explicit Glyph() = default;
+	explicit Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color) :
 		texture(texture_),
 		depth(depth_) 
 	{
@@ -49,8 +49,8 @@ struct RenderBatch {
 	GLuint offset;
 	GLuint numVertices;
 	GLuint texture;
-	RenderBatch() {};
-	RenderBatch(GLuint offset_, GLuint numVertices_, GLuint texture_) :
+	explicit RenderBatch() {};
+	explicit RenderBatch(GLuint offset_, GLuint numVertices_, GLuint texture_) :
 		offset(offset_),
 		numVertices(numVertices_),
 		texture(texture_) {};
@@ -74,8 +74,8 @@ class SpriteBatch
 	static bool compareBackToFront(Glyph* a, Glyph* b);
 	static bool compareTexture(Glyph* a, Glyph* b);
 public:
-	SpriteBatch();
-	SpriteBatch(const SpriteBatch& spriteBatch);
+	explicit SpriteBatch();
+	explicit SpriteBatch(const SpriteBatch& spriteBatch);
 	~SpriteBatch();
 
 	void init();

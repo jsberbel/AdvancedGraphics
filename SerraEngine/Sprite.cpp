@@ -45,8 +45,8 @@ namespace SerraEngine {
 		vertexData[5].setUV(1.0f, 1.0f);
 
 		//for (int i = 0; i < 6; i++) vertexData[i].color = { 0,0,255,255 };
-		vertexData[0].color = vertexData[2].color = vertexData[3].color = vertexData[5].color = { 0,0,255,255 };
-		vertexData[1].color = vertexData[4].color = { 255,0,0,255 };
+		vertexData[0].color = vertexData[2].color = vertexData[3].color = vertexData[5].color = ColorRGBA8{ 0,0,255,255 };
+		vertexData[1].color = vertexData[4].color = ColorRGBA8{ 255,0,0,255 };
 
 		glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);

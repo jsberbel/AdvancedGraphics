@@ -45,7 +45,7 @@ bool Agent::collideWithAgent(Agent* agent) {
 	if (agent->_position.x < _position.x - AGENT_WIDTH || agent->_position.x > _position.x + AGENT_WIDTH) return false;
 
 	// Is the Agent too far away in the Y direction to check?
-	if (agent->_position.y < _position.y - AGENT_WIDTH || agent->_position.y > _position.y + AGENT_WIDTH)      return false;
+	if (agent->_position.y < _position.y - AGENT_WIDTH || agent->_position.y > _position.y + AGENT_WIDTH) return false;
 
 	const float MIN_DISTANCE = AGENT_WIDTH; // This used to be AGENT_RADIUS * 2
 

@@ -2,6 +2,8 @@
 #include "Gun.h"
 #include <SDL/SDL.h>
 
+const SerraEngine::ColorRGBA8 Player::PLAYER_COLOR{ 0,0, 185, 255 };
+
 Player::Player(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager, SerraEngine::Camera2D &camera, std::vector<Bullet> &bullets) :
 	_inputManager(inputManager),
 	_camera(camera),
@@ -15,7 +17,7 @@ Player::~Player() {
 	for (auto g : _guns) if (!g) delete g, g = nullptr;
 }
 
-void Player::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Player::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans) {
 	static bool dirCol = false;
 
 	if (_inputManager.isKeyDown(SDLK_w))	  _position.y += _speed*deltaTime, dirCol = true;

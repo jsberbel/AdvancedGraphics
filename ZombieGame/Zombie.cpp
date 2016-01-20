@@ -6,7 +6,7 @@ Zombie::Zombie(const glm::vec2 & position, float speed, const SerraEngine::Color
 	_health = 150;
 }
 
-void Zombie::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans, std::vector<Zombie*>& zombies) {
+void Zombie::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans) {
 	static bool dirCol = false;
 	glm::vec2 prevPos = _position;
 	

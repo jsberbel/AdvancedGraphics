@@ -1,6 +1,7 @@
 #include "Gun.h"
 #include <random>
 #include <ctime>
+#define GLM_FORCE_RADIANS
 #include <glm/gtx/rotate_vector.hpp>
 
 Gun::Gun(const std::string &name, int fireRate, int bulletPerShot, float spread, float bulletSpeed, int bulletDamage) :

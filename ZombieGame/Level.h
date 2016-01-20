@@ -15,7 +15,7 @@ class Level
 public:
 	static const int TILE_WIDTH;
 
-	Level(const std::string& fileName);
+	explicit Level(const std::string& fileName);
 	~Level() = default;
 	void draw();
 

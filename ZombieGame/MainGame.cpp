@@ -11,25 +11,13 @@
 #include "Gun.h"
 
 MainGame::MainGame(const std::string &name, int screenWidth, int screenHeight) :
-	_levels(),
-	_gameState(GameState::PLAY),
 	_screenWidth(screenWidth),
 	_screenHeight(screenHeight),
-	_curLevel(0),
 	_window(screenWidth, screenHeight, name),
-	_textureProgram(),
-	_inputManager(),
 	_camera(screenWidth, screenHeight),
 	_HUDcamera(screenWidth, screenHeight),
-	_agentsBatch(),
-	_HUDBatch(),
 	_spriteFont(nullptr),
-	_player(nullptr),
-	_humans(),
-	_zombies(),
-	_bullets(),
-	_numHumansKilled(0),
-	_numZombiesKilled(0) {}
+	_player(nullptr) {}
 
 MainGame::~MainGame() {
 	for (auto l : _levels) if (!l) delete l, l = nullptr;
@@ -46,7 +34,7 @@ void MainGame::run() {
 
 void MainGame::initSystems() {
 	SerraEngine::init();
-	_window.createWindow({200, 200, 200, 255});
+	_window.createWindow(SerraEngine::ColorRGBA8{200, 200, 200, 255});
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	initShaders();
 	_agentsBatch.init();
@@ -84,7 +72,7 @@ void MainGame::initLevel() {
 	//Add guns
 	static const float BULLET_SPEED = 20.0f;
 	_player->addGun(new Gun("Magnum", 10, 1, 5.0f, BULLET_SPEED, 30));
-	_player->addGun(new Gun("Shotgun", 30, 12, 20.0f, BULLET_SPEED, 4));
+	_player->addGun(new Gun("Shotgun", 30, 12, 20.0f, BULLET_SPEED, 10));
 	_player->addGun(new Gun("MP5", 2, 1, 10.0f, BULLET_SPEED, 20));
 }
 
@@ -99,7 +87,7 @@ void MainGame::initShaders() {
 
 void MainGame::updateAgents(float deltaTime) {
 	//Update humans
-	for (auto h : _humans) h->update(deltaTime, _levels[_curLevel]->getLevelData());
+	for (const auto h : _humans) h->update(deltaTime, _levels[_curLevel]->getLevelData());
 	/*for (auto i = _humans.begin(), end = _humans.end(); i != end; ++i) {
 		for (auto j = std::next(i, 1), end = _humans.end(); j != end; ++j) {
 			(*i)->collideWithAgent(*j);
@@ -112,7 +100,7 @@ void MainGame::updateAgents(float deltaTime) {
 	}
 
 	//Update zombies
-	for (auto z : _zombies) z->update(deltaTime, _levels[_curLevel]->getLevelData(), _humans);
+	for (const auto z : _zombies) z->update(deltaTime, _levels[_curLevel]->getLevelData(), _humans);
 	for (unsigned i = 0; i < _zombies.size(); i++) {
 		for (unsigned j = i+1; j < _zombies.size(); j++) {
 			_zombies[i]->collideWithAgent(_zombies[j]);
@@ -291,10 +279,8 @@ void MainGame::drawGame() {
 
 	//Draw the agents
 	const glm::vec2 agentDims(Agent::AGENT_RADIUS*2.0f);
-	for (auto h : _humans) {
-		if (_camera.isBoxInView(h->getPosition(), agentDims)) h->pushBatch(_agentsBatch);
- 	}
-	for (auto z : _zombies) if (_camera.isBoxInView(z->getPosition(), agentDims)) z->pushBatch(_agentsBatch);
+	for (const auto h : _humans) if (_camera.isBoxInView(h->getPosition(), agentDims)) h->pushBatch(_agentsBatch);
+	for (const auto z : _zombies) if (_camera.isBoxInView(z->getPosition(), agentDims)) z->pushBatch(_agentsBatch);
 
 	//Draw bullets
 	for (auto &b : _bullets) b.pushBatch(_agentsBatch);

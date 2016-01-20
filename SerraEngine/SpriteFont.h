@@ -53,8 +53,8 @@ namespace SerraEngine {
 
     class SpriteFont {
     public:
-        SpriteFont(const char* font, int size, char cs, char ce);
-        SpriteFont(const char* font, int size) :
+		explicit SpriteFont(const char* font, int size, char cs, char ce);
+		explicit SpriteFont(const char* font, int size) :
             SpriteFont(font, size, FIRST_PRINTABLE_CHAR, LAST_PRINTABLE_CHAR) {
         }
         /// Destroys the font resources

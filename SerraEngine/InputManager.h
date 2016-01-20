@@ -10,7 +10,7 @@ class InputManager
 	std::unordered_map<unsigned int, bool> _keyMap;
 	std::unordered_map<unsigned int, bool> _prevKeyMap;
 public:
-	InputManager();
+	explicit InputManager();
 	~InputManager() = default;
 	void update();
 

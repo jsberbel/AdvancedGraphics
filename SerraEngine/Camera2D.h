@@ -13,8 +13,8 @@ class Camera2D
 	glm::mat4 _cameraMatrix;
 	glm::mat4 _orthoMatrix;
 public:
-	Camera2D();
-	Camera2D(int screenWidth, int screenHeight);
+	explicit Camera2D();
+	explicit Camera2D(int screenWidth, int screenHeight);
 	~Camera2D() = default;
 
 	void init(int screenWidth, int screenHeight);
