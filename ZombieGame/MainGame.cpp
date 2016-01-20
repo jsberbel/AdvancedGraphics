@@ -10,12 +10,12 @@
 #include "Zombie.h"
 #include "Gun.h"
 
-MainGame::MainGame(const std::string &name, int screenWidth, int screenHeight) :
+MainGame::MainGame(const std::string &name, int screenWidth, int m_screenHeight) :
 	_screenWidth(screenWidth),
-	_screenHeight(screenHeight),
-	_window(screenWidth, screenHeight, name),
-	_camera(screenWidth, screenHeight),
-	_HUDcamera(screenWidth, screenHeight),
+	m_screenHeight(m_screenHeight),
+	_window(screenWidth, m_screenHeight, name),
+	_camera(screenWidth, m_screenHeight),
+	_HUDcamera(screenWidth, m_screenHeight),
 	_spriteFont(nullptr),
 	_player(nullptr) {}
 
@@ -39,7 +39,7 @@ void MainGame::initSystems() {
 	initShaders();
 	_agentsBatch.init();
 	_HUDBatch.init();
-	_HUDcamera.setPosition(glm::vec2(_screenWidth*0.5f, _screenHeight*0.5f));
+	_HUDcamera.setPosition(glm::vec2(_screenWidth*0.5f, m_screenHeight*0.5f));
 	_spriteFont = std::make_unique<SerraEngine::SpriteFont>("Fonts/ComickBook_Simple.ttf", 64);
 }
 

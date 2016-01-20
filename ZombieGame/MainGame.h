@@ -21,7 +21,7 @@ class MainGame
 	const float ZOMBIE_SPEED = 1.8f;
 
 	std::vector<Level*> _levels; //List of all levels
-	int _screenWidth, _screenHeight;
+	int _screenWidth, m_screenHeight;
 	GameState _gameState = GameState::PLAY;
 	int _curLevel = 0;
 
