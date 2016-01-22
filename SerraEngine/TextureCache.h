@@ -5,7 +5,7 @@
 namespace SerraEngine {
 	class TextureCache
 	{
-		std::map<std::string, GLTexture> _textureMap;
+		std::map<std::string, GLTexture> m_textureMap;
 	public:
 		explicit TextureCache() = default;
 		~TextureCache() = default;

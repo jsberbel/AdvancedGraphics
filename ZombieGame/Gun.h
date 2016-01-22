@@ -1,17 +1,16 @@
 #pragma once
-#include <string>
 #include <vector>
 #include "Bullet.h"
 
 class Gun
 {
-	std::string _name;
-	int _fireRate;			// Rate per frames
-	int _bulletsPerShot;	// How many bullets fired at x time
-	float _spread;			// Accuracy
-	float _bulletSpeed;
-	int _bulletDamage;
-	float _frameCounter;
+	std::string m_name;
+	int m_fireRate;			// Rate per frames
+	int m_bulletsPerShot;	// How many bullets fired at x time
+	float m_spread;			// Accuracy
+	float m_bulletSpeed;
+	int m_bulletDamage;
+	float m_frameCounter;
 
 	void fire(const glm::vec2 & position, const glm::vec2 & direction, std::vector<Bullet> &bullets);
 public:

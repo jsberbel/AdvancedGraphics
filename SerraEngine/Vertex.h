@@ -1,6 +1,5 @@
 #pragma once
 #include <GL\glew.h>
-#include <cstddef>
 
 namespace SerraEngine {
 
@@ -30,6 +29,7 @@ namespace SerraEngine {
 		Position position;
 		ColorRGBA8 color;
 		UV uv;
+		explicit Vertex() = default;
 		void setPosition(GLfloat x, GLfloat y) {
 			position.x = x;
 			position.y = y;
@@ -53,6 +53,5 @@ namespace SerraEngine {
 		void setUV(UV uv_) {
 			uv = uv_;
 		};
-		explicit Vertex() = default;
 	};
 }

@@ -2,42 +2,43 @@
 
 namespace SerraEngine {
 
-InputManager::InputManager() : _mouseCoords(0.0f,0.0f)
+InputManager::InputManager() : m_mouseCoords(0.0f,0.0f)
 {}
 
 void InputManager::update() {
-	for (auto &it : _keyMap) {
-		_prevKeyMap[it.first] = it.second;
+	for (auto &it : m_keyMap) {
+		m_prevKeyMap[it.first] = it.second;
 	}
 }
 
 void InputManager::pressKey(unsigned keyID) {
-	_keyMap[keyID] = true;
+	m_keyMap[keyID] = true;
 }
 
 void InputManager::releaseKey(unsigned keyID) {
-	_keyMap[keyID] = false;
+	m_keyMap[keyID] = false;
 }
 
 bool InputManager::isKeyDown(unsigned keyID) {
-	auto it = _keyMap.find(keyID);
-	if (it != _keyMap.end()) return it->second; //key found
+	auto it = m_keyMap.find(keyID);
+	if (it != m_keyMap.end()) return it->second; //key found
 	return false;
 }
 
-bool InputManager::isKeyDown(const std::unordered_map<unsigned int, bool> &keyMap, unsigned keyID) {
+bool InputManager::isKeyDown(const std::unordered_map<unsigned int, bool> &keyMap, unsigned keyID)
+{
 	auto it = keyMap.find(keyID);
 	if (it != keyMap.end()) return it->second; //key found
 	return false;
 }
 
 bool InputManager::isKeyPressed(unsigned keyID) {
-	return (isKeyDown(keyID) && !isKeyDown(_prevKeyMap, keyID));
+	return (isKeyDown(keyID) && !isKeyDown(m_prevKeyMap, keyID));
 }
 
 void InputManager::setMouseCoords(float x, float y) {
-	_mouseCoords.x = x;
-	_mouseCoords.y = y;
+	m_mouseCoords.x = x;
+	m_mouseCoords.y = y;
 }
 
 }

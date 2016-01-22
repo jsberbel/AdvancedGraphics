@@ -5,28 +5,28 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 Gun::Gun(const std::string &name, int fireRate, int bulletPerShot, float spread, float bulletSpeed, int bulletDamage) :
-	_name(name),
-	_fireRate(fireRate),
-	_bulletsPerShot(bulletPerShot),
-	_spread(spread),
-	_bulletSpeed(bulletSpeed),
-	_bulletDamage(bulletDamage),
-	_frameCounter(0) {}
+	m_name(name),
+	m_fireRate(fireRate),
+	m_bulletsPerShot(bulletPerShot),
+	m_spread(spread),
+	m_bulletSpeed(bulletSpeed),
+	m_bulletDamage(bulletDamage),
+	m_frameCounter(0) {}
 
 void Gun::update(bool isMouseDown, const glm::vec2 & position, const glm::vec2 & direction, std::vector<Bullet>& bullets, float deltaTime) {
-	_frameCounter += deltaTime;
-	if (_frameCounter >= _fireRate && isMouseDown) {
+	m_frameCounter += deltaTime;
+	if (m_frameCounter >= m_fireRate && isMouseDown) {
 		fire(position, direction, bullets);
-		_frameCounter = 0;
+		m_frameCounter = 0;
 	}
 }
 
 void Gun::fire(const glm::vec2 & position, const glm::vec2 & direction, std::vector<Bullet>& bullets) {
-	static std::mt19937 randomEngine((unsigned)time(nullptr));
-	std::uniform_real_distribution<float> randRot(-_spread, _spread);
+	static std::mt19937 randomEngine(static_cast<unsigned>(time(nullptr)));
+	std::uniform_real_distribution<float> randRot(-m_spread, m_spread);
 
-	for (int i = 0; i < _bulletsPerShot; i++) {
+	for (int i = 0; i < m_bulletsPerShot; i++) {
 		glm::vec2 dir = glm::rotate(direction, glm::radians(randRot(randomEngine)));
-		bullets.emplace_back(position, dir, _bulletSpeed, _bulletDamage);
+		bullets.emplace_back(position, dir, m_bulletSpeed, m_bulletDamage);
 	}
 }

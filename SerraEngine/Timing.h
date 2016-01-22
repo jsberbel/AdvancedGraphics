@@ -5,10 +5,10 @@ namespace SerraEngine {
 
 class FPSLimiter
 {
-	float _fps;
-	float _targetFPS;
-	Uint32 _startTicks;
-	Uint32 _frameTicks;
+	float m_fps;
+	float m_targetFPS;
+	Uint32 m_startTicks;
+	Uint32 m_frameTicks;
 	static const int NUM_SAMPLES;
 
 	void calculateFPS();
@@ -17,10 +17,10 @@ public:
 	explicit FPSLimiter(float targetFPS);
 	~FPSLimiter() = default;
 
-	inline void setTargetFPS(float targetFPS) { _targetFPS = targetFPS; };
+	void setTargetFPS(float targetFPS) { m_targetFPS = targetFPS; };
 	void getFPS() const;
 
-	inline void begin() { _startTicks = SDL_GetTicks(); };
+	void begin() { m_startTicks = SDL_GetTicks(); };
 	void end();
 };
 

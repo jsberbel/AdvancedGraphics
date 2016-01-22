@@ -1,10 +1,9 @@
 #include "ErrorManager.h"
+#include <SDL\SDL.h>
 
 namespace SerraEngine {
 	void errorRunTime(const std::string &errorString) {
-		std::cout << errorString << std::endl;
-		system("pause");
 		SDL_Quit();
-		exit(69);
+		throw std::exception(errorString.c_str());
 	}
 }

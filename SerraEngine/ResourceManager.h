@@ -1,11 +1,10 @@
 #pragma once
 #include "TextureCache.h"
-#include <string>
 
 namespace SerraEngine {
 	class ResourceManager
 	{
-		static TextureCache _textureCache;
+		static TextureCache m_textureCache;
 	public:
 		static GLTexture getTexture(std::string texturePath);
 	};

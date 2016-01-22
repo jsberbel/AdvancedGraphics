@@ -1,9 +1,10 @@
 #include "Sprite.h"
 #include "ResourceManager.h"
+#include "Vertex.h"
 
 namespace SerraEngine {
 
-	Sprite::Sprite() : _vboID(0)
+	Sprite::Sprite() : _x(0), _y(0), _w(0), _h(0), _vboID(0)
 	{
 
 	}
@@ -53,7 +54,8 @@ namespace SerraEngine {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void Sprite::draw() {
+	void Sprite::draw() const
+	{
 		glBindTexture(GL_TEXTURE_2D, _texture.id);
 		//bind VBO
 		glBindBuffer(GL_ARRAY_BUFFER, _vboID);

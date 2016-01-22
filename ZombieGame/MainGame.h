@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Level.h"
 #include "Bullet.h"
+#include <memory>
 
 class Zombie;
 
@@ -20,27 +21,27 @@ class MainGame
 	const float HUMAN_SPEED = 1.5f;
 	const float ZOMBIE_SPEED = 1.8f;
 
-	std::vector<Level*> _levels; //List of all levels
-	int _screenWidth, m_screenHeight;
-	GameState _gameState = GameState::PLAY;
-	int _curLevel = 0;
+	std::vector<Level*> m_levels; //List of all levels
+	int m_screenWidth, m_screenHeight;
+	GameState m_gameState = GameState::PLAY;
+	int m_curLevel = 0;
 
-	SerraEngine::GLWindow _window; // The game window
-	SerraEngine::GLSLManager _textureProgram; // The shader program
-	SerraEngine::InputManager _inputManager; // Handles input
-	SerraEngine::Camera2D _camera; // Main Camera
-	SerraEngine::Camera2D _HUDcamera;
-	SerraEngine::SpriteBatch _agentsBatch;
-	SerraEngine::SpriteBatch _HUDBatch;
-	std::unique_ptr<SerraEngine::SpriteFont> _spriteFont;
+	SerraEngine::GLWindow m_window; // The game window
+	SerraEngine::GLSLManager m_textureProgram; // The shader program
+	SerraEngine::InputManager m_inputManager; // Handles input
+	SerraEngine::Camera2D m_camera; // Main Camera
+	SerraEngine::Camera2D m_HUDcamera;
+	SerraEngine::SpriteBatch m_agentsBatch;
+	SerraEngine::SpriteBatch m_HUDBatch;
+	std::unique_ptr<SerraEngine::SpriteFont> m_spriteFont;
 
-	Player* _player;
-	std::vector<Human*> _humans; //vector of all humans
-	std::vector<Zombie*> _zombies; //vector of all zombies
-	std::vector<Bullet> _bullets; //vector of all bullets
+	Player* m_player;
+	std::vector<Human*> m_humans; //vector of all humans
+	std::vector<Zombie*> m_zombies; //vector of all zombies
+	std::vector<Bullet> m_bullets; //vector of all bullets
 
-	int _numHumansKilled = 0;
-	int _numZombiesKilled = 0;
+	int m_numHumansKilled = 0;
+	int m_numZombiesKilled = 0;
 	
 	void initSystems();
 	void initLevel();

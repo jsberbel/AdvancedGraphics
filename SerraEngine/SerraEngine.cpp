@@ -1,4 +1,5 @@
 #include "SerraEngine.h"
+#include <SDL/SDL.h>
 
 namespace SerraEngine {
 

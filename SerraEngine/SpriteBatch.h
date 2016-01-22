@@ -49,7 +49,7 @@ struct RenderBatch {
 	GLuint offset;
 	GLuint numVertices;
 	GLuint texture;
-	explicit RenderBatch() {};
+	explicit RenderBatch() = default;
 	explicit RenderBatch(GLuint offset_, GLuint numVertices_, GLuint texture_) :
 		offset(offset_),
 		numVertices(numVertices_),
@@ -58,13 +58,13 @@ struct RenderBatch {
 
 class SpriteBatch
 {
-	GLuint _vbo;
-	GLuint _vao;
-	GlyphSortType _sortType;
+	GLuint m_vbo;
+	GLuint m_vao;
+	GlyphSortType m_sortType;
 
-	std::vector<Glyph*> _glyphPointers; // Reference glyphs for sorting
-	std::vector<Glyph> _glyphs; // Real used glyphs
-	std::vector<RenderBatch> _renderBatches;
+	std::vector<Glyph*> m_glyphPointers; // Reference glyphs for sorting
+	std::vector<Glyph> m_glyphs; // Real used glyphs
+	std::vector<RenderBatch> m_renderBatches;
 
 	void createRenderBatches();
 	void createVertexArray();
@@ -75,7 +75,7 @@ class SpriteBatch
 	static bool compareTexture(Glyph* a, Glyph* b);
 public:
 	explicit SpriteBatch();
-	explicit SpriteBatch(const SpriteBatch& spriteBatch);
+	explicit SpriteBatch(const SpriteBatch& sb);
 	~SpriteBatch();
 
 	void init();

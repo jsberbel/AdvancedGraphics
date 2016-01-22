@@ -3,15 +3,21 @@
 
 namespace SerraEngine {
 	
-SpriteBatch::SpriteBatch() : _vbo(0), _vao(0), _sortType(GlyphSortType::NONE)
+SpriteBatch::SpriteBatch() : m_vbo(0), m_vao(0), m_sortType(GlyphSortType::NONE)
 {}
 
-SpriteBatch::SpriteBatch(const SpriteBatch& spriteBatch) {
-	*this = spriteBatch;
+SpriteBatch::SpriteBatch(const SpriteBatch& sb): m_vbo(sb.m_vbo), m_vao(sb.m_vao), m_sortType(sb.m_sortType)
+{
+	m_glyphPointers.clear();
+	for (auto gp : sb.m_glyphPointers) m_glyphPointers.push_back(new Glyph(*gp));
+	m_glyphs.clear();
+	for (auto g : sb.m_glyphs) m_glyphs.push_back(g);
+	m_renderBatches.clear();
+	for (auto rb : sb.m_renderBatches) m_renderBatches.push_back(rb);
 }
 
 SpriteBatch::~SpriteBatch() {
-	for (auto g : _glyphPointers) if(!g) delete g, g = nullptr;
+	for (auto g : m_glyphPointers) if(!g) delete g, g = nullptr;
 }
 
 void SpriteBatch::init() {
@@ -19,25 +25,25 @@ void SpriteBatch::init() {
 }
 
 void SpriteBatch::begin(GlyphSortType sortType){
-	_sortType = sortType;
-	_renderBatches.clear();
-	_glyphs.clear();
+	m_sortType = sortType;
+	m_renderBatches.clear();
+	m_glyphs.clear();
 }
 
 void SpriteBatch::end(){
-	_glyphPointers.resize(_glyphs.size());
-	for (unsigned i = 0; i < _glyphs.size(); i++) _glyphPointers[i] = &_glyphs[i];
+	m_glyphPointers.resize(m_glyphs.size());
+	for (unsigned i = 0; i < m_glyphs.size(); i++) m_glyphPointers[i] = &m_glyphs[i];
 	sortGlyphs();
 	createRenderBatches();
 }
 
 void SpriteBatch::pushBatch(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 &color) {
-	_glyphs.emplace_back(texture, depth, destRect, uvRect, color);
+	m_glyphs.emplace_back(texture, depth, destRect, uvRect, color);
 }
 
 void SpriteBatch::renderBatch() {
-	glBindVertexArray(_vao);
-	for (RenderBatch rb : _renderBatches) {
+	glBindVertexArray(m_vao);
+	for (const auto &rb : m_renderBatches) {
 		glBindTexture(GL_TEXTURE_2D, rb.texture);
 		glDrawArrays(GL_TRIANGLES, rb.offset, rb.numVertices);
 	}
@@ -45,37 +51,37 @@ void SpriteBatch::renderBatch() {
 }
 
 void SpriteBatch::createRenderBatches() {
-	if (_glyphPointers.empty()) return;
+	if (m_glyphPointers.empty()) return;
 
 	std::vector<Vertex> vertices;
-	vertices.resize(_glyphPointers.size() * 6); //6 vertices for each glyph
+	vertices.resize(m_glyphPointers.size() * 6); //6 vertices for each glyph
 
-	int offset = 0; //current offset
-	int curVertex = 0; //current vertex
+	auto offset = 0; //current offset
+	auto curVertex = 0; //current vertex
 	//Add the first batch
-	_renderBatches.emplace_back(offset, 6, _glyphPointers[0]->texture); //push_back that creates an object automatically with the parameters
-	vertices[curVertex++] = _glyphPointers[0]->topLeft;
-	vertices[curVertex++] = _glyphPointers[0]->bottomLeft;
-	vertices[curVertex++] = _glyphPointers[0]->bottomRight;
-	vertices[curVertex++] = _glyphPointers[0]->bottomRight;
-	vertices[curVertex++] = _glyphPointers[0]->topRight;
-	vertices[curVertex++] = _glyphPointers[0]->topLeft;
+	m_renderBatches.emplace_back(offset, 6, m_glyphPointers[0]->texture); //push_back that creates an object automatically with the parameters
+	vertices[curVertex++] = m_glyphPointers[0]->topLeft;
+	vertices[curVertex++] = m_glyphPointers[0]->bottomLeft;
+	vertices[curVertex++] = m_glyphPointers[0]->bottomRight;
+	vertices[curVertex++] = m_glyphPointers[0]->bottomRight;
+	vertices[curVertex++] = m_glyphPointers[0]->topRight;
+	vertices[curVertex++] = m_glyphPointers[0]->topLeft;
 	offset += 6;
-	for (unsigned curGlyph = 1; curGlyph < _glyphPointers.size(); curGlyph++) {
-		if (_glyphPointers[curGlyph]->texture != _glyphPointers[curGlyph - 1]->texture) {
-			_renderBatches.emplace_back(offset, 6, _glyphPointers[curGlyph]->texture);
+	for (unsigned curGlyph = 1; curGlyph < m_glyphPointers.size(); curGlyph++) {
+		if (m_glyphPointers[curGlyph]->texture != m_glyphPointers[curGlyph - 1]->texture) {
+			m_renderBatches.emplace_back(offset, 6, m_glyphPointers[curGlyph]->texture);
 		}
-		else _renderBatches.back().numVertices += 6;
-		vertices[curVertex++] = _glyphPointers[curGlyph]->topLeft;
-		vertices[curVertex++] = _glyphPointers[curGlyph]->bottomLeft;
-		vertices[curVertex++] = _glyphPointers[curGlyph]->bottomRight;
-		vertices[curVertex++] = _glyphPointers[curGlyph]->bottomRight;
-		vertices[curVertex++] = _glyphPointers[curGlyph]->topRight;
-		vertices[curVertex++] = _glyphPointers[curGlyph]->topLeft;
+		else m_renderBatches.back().numVertices += 6;
+		vertices[curVertex++] = m_glyphPointers[curGlyph]->topLeft;
+		vertices[curVertex++] = m_glyphPointers[curGlyph]->bottomLeft;
+		vertices[curVertex++] = m_glyphPointers[curGlyph]->bottomRight;
+		vertices[curVertex++] = m_glyphPointers[curGlyph]->bottomRight;
+		vertices[curVertex++] = m_glyphPointers[curGlyph]->topRight;
+		vertices[curVertex++] = m_glyphPointers[curGlyph]->topLeft;
 		offset += 6;
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 	//orphan the buffer
 	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 	//upload the data
@@ -88,11 +94,11 @@ void SpriteBatch::createRenderBatches() {
 }
 
 void SpriteBatch::createVertexArray() {
-	if (!_vao) glGenVertexArrays(1, &_vao);
-	glBindVertexArray(_vao);
+	if (!m_vao) glGenVertexArrays(1, &m_vao);
+	glBindVertexArray(m_vao);
 
-	if (!_vbo) glGenBuffers(1, &_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	if (!m_vbo) glGenBuffers(1, &m_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
 	//use attribute arrays
 	glEnableVertexAttribArray(0);
@@ -100,26 +106,26 @@ void SpriteBatch::createVertexArray() {
 	glEnableVertexAttribArray(2);
 
 	//position attribute pointer
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)));
 	//color attribute pointer
-	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, color)));
 	//uv attribute pointer
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, uv)));
 
 	glBindVertexArray(0);
 }
 
 void SpriteBatch::sortGlyphs() {
-	switch (_sortType)
+	switch (m_sortType)
 	{
 	case GlyphSortType::FRONT_TO_BACK:
-		std::stable_sort(_glyphPointers.begin(), _glyphPointers.end(), compareFrontToBack);
+		std::stable_sort(m_glyphPointers.begin(), m_glyphPointers.end(), compareFrontToBack);
 		break;
 	case GlyphSortType::BACK_TO_FRONT:
-		std::stable_sort(_glyphPointers.begin(), _glyphPointers.end(), compareBackToFront);
+		std::stable_sort(m_glyphPointers.begin(), m_glyphPointers.end(), compareBackToFront);
 		break;
 	case GlyphSortType::TEXTURE:
-		std::stable_sort(_glyphPointers.begin(), _glyphPointers.end(), compareTexture);
+		std::stable_sort(m_glyphPointers.begin(), m_glyphPointers.end(), compareTexture);
 		break;
 	default:
 		break;

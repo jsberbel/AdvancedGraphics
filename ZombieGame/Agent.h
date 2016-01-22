@@ -1,8 +1,6 @@
 #pragma once
-#include <glm/glm.hpp>
 #include <SerraEngine/SpriteBatch.h>
 #include <SerraEngine/Vertex.h>
-#include <memory>
 
 class Zombie;
 class Human;
@@ -15,7 +13,7 @@ protected:
 	SerraEngine::ColorRGBA8 _color;
 	float _health;
 
-	void checkTilePosition(const std::vector<std::string>& levelData, std::vector<glm::vec2> &collideTilePositions, float x, float y);
+	void checkTilePosition(const std::vector<std::string>& levelData, std::vector<glm::vec2> &collideTilePositions, float x, float y) const;
 	void AABBCollideWithTile(glm::vec2 tilePos);
 public:
 	static const float AGENT_WIDTH;
@@ -27,8 +25,8 @@ public:
 
 	virtual void update(float deltaTime = 0.0f,
 						const std::vector<std::string>& lvlData = std::vector<std::string>(),
-						std::vector<Human*>& humans = std::vector<Human*>()) = 0;
-	void pushBatch(SerraEngine::SpriteBatch &spriteBatch);
+						const std::vector<Human*>& humans = std::vector<Human*>()) = 0;
+	void pushBatch(SerraEngine::SpriteBatch &spriteBatch) const;
 	bool collideWithLevel(const std::vector<std::string>& lvlData, bool dirCol);
 	bool collideWithAgent(Agent* agent);
 	bool applyDamage(int damage); //return true if dead

@@ -1,12 +1,12 @@
 #include "SpriteFont.h"
-
 #include "SpriteBatch.h"
-
+#include <SDL_ttf/SDL_ttf.h>
+#include <map>
 #include <SDL/SDL.h>
 
 int closestPow2(int i) {
     i--;
-    int pi = 1;
+	auto pi = 1;
     while (i > 0) {
         i >>= 1;
         pi <<= 1;
@@ -23,7 +23,7 @@ namespace SerraEngine {
         if (!TTF_WasInit()) {
             TTF_Init();
         }
-        TTF_Font* f = TTF_OpenFont(font, size);
+	    auto f = TTF_OpenFont(font, size);
         if (f == nullptr) {
             fprintf(stderr, "Failed to open TTF font %s\n", font);
             fflush(stderr);
@@ -37,7 +37,7 @@ namespace SerraEngine {
         // First neasure all the regions
         glm::ivec4* glyphRects = new glm::ivec4[_regLength];
         int i = 0, advance;
-        for (char c = cs; c <= ce; c++) {
+        for (auto c = cs; c <= ce; c++) {
             TTF_GlyphMetrics(f, c, &glyphRects[i].x, &glyphRects[i].z, &glyphRects[i].y, &glyphRects[i].w, &advance);
             glyphRects[i].z -= glyphRects[i].x;
             glyphRects[i].x = 0;
@@ -98,16 +98,16 @@ namespace SerraEngine {
             for (unsigned ci = 0; ci < bestPartition[ri].size(); ci++) {
                 int gi = bestPartition[ri][ci];
 
-                SDL_Surface* glyphSurface = TTF_RenderGlyph_Blended(f, (char)(cs + gi), fg);
+	            auto glyphSurface = TTF_RenderGlyph_Blended(f, static_cast<char>(cs + gi), fg);
 
                 // Pre-multiplication occurs here
-                unsigned char* sp = (unsigned char*)glyphSurface->pixels;
-                int cp = glyphSurface->w * glyphSurface->h * 4;
-                for (int i = 0; i < cp; i += 4) {
-                    float a = sp[i + 3] / 255.0f;
-                    sp[i] *= static_cast<unsigned char>(a);
-                    sp[i + 1] = sp[i];
-                    sp[i + 2] = sp[i];
+	            auto sp = static_cast<unsigned char*>(glyphSurface->pixels);
+	            auto cp = glyphSurface->w * glyphSurface->h * 4;
+                for (auto ai = 0; ai < cp; ai += 4) {
+	                auto a = sp[ai + 3] / 255.0f;
+                    sp[ai] *= static_cast<unsigned char>(a);
+                    sp[ai + 1] = sp[ai];
+                    sp[ai + 2] = sp[ai];
                 }
 
                 // Save glyph image and update coordinates
@@ -142,18 +142,18 @@ namespace SerraEngine {
         // Create spriteBatch glyphs
         _glyphs = new CharGlyph[_regLength + 1];
         for (i = 0; i < _regLength; i++) {
-            _glyphs[i].character = (char)(cs + i);
+            _glyphs[i].character = static_cast<char>(cs + i);
             _glyphs[i].size = glm::vec2(glyphRects[i].z, glyphRects[i].w);
             _glyphs[i].uvRect = glm::vec4(
-                (float)glyphRects[i].x / (float)bestWidth,
-                (float)glyphRects[i].y / (float)bestHeight,
-                (float)glyphRects[i].z / (float)bestWidth,
-                (float)glyphRects[i].w / (float)bestHeight
+                static_cast<float>(glyphRects[i].x) / static_cast<float>(bestWidth),
+                static_cast<float>(glyphRects[i].y) / static_cast<float>(bestHeight),
+                static_cast<float>(glyphRects[i].z) / static_cast<float>(bestWidth),
+                static_cast<float>(glyphRects[i].w) / static_cast<float>(bestHeight)
                 );
         }
         _glyphs[_regLength].character = ' ';
         _glyphs[_regLength].size = _glyphs[0].size;
-        _glyphs[_regLength].uvRect = glm::vec4(0, 0, (float)rs / (float)bestWidth, (float)rs / (float)bestHeight);
+        _glyphs[_regLength].uvRect = glm::vec4(0, 0, static_cast<float>(rs) / static_cast<float>(bestWidth), static_cast<float>(rs) / static_cast<float>(bestHeight));
 
         glBindTexture(GL_TEXTURE_2D, 0);
         delete[] glyphRects;
@@ -202,7 +202,8 @@ namespace SerraEngine {
         return l;
     }
 
-    glm::vec2 SpriteFont::measure(const char* s) {
+    glm::vec2 SpriteFont::measure(const char* s) const
+    {
         glm::vec2 size(0, _fontHeight);
         float cw = 0;
         for (int si = 0; s[si] != 0; si++) {

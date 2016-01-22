@@ -6,11 +6,11 @@ Zombie::Zombie(const glm::vec2 & position, float speed, const SerraEngine::Color
 	_health = 150;
 }
 
-void Zombie::update(float deltaTime, const std::vector<std::string>& lvlData, std::vector<Human*>& humans) {
-	static bool dirCol = false;
-	glm::vec2 prevPos = _position;
-	
-	Human* closestHuman = getNearestHuman(humans);
+void Zombie::update(float deltaTime, const std::vector<std::string>& lvlData, const std::vector<Human*>& humans) {
+	static auto dirCol = false;
+	auto prevPos = _position;
+
+	auto closestHuman = getNearestHuman(humans);
 	if (closestHuman != nullptr) {
 		glm::vec2 direction = glm::normalize(closestHuman->getPosition() - _position);
 		_position += direction*_speed*deltaTime;
@@ -21,12 +21,13 @@ void Zombie::update(float deltaTime, const std::vector<std::string>& lvlData, st
 	collideWithLevel(lvlData, dirCol);
 }
 
-Human* Zombie::getNearestHuman(std::vector<Human*>& humans) {
+Human* Zombie::getNearestHuman(const std::vector<Human*>& humans) const
+{
 	Human* closestHuman = nullptr;
-	float smallestDistance = 999999.0f;
+	auto smallestDistance = 999999.0f;
 	for (auto h : humans) {
-		glm::vec2 distVec = h->getPosition() - _position;
-		float distance = glm::length(distVec);
+		auto distVec = h->getPosition() - _position;
+		auto distance = glm::length(distVec);
 		if (distance < smallestDistance) {
 			smallestDistance = distance;
 			closestHuman = h;

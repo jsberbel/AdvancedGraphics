@@ -2,8 +2,6 @@
 #include <iostream>
 #include <GL\glew.h>
 #include "GLTexture.h"
-#include "Vertex.h"
-#include <string>
 
 namespace SerraEngine {
 	class Sprite
@@ -20,11 +18,11 @@ namespace SerraEngine {
 		~Sprite();
 
 		void init(float x, float y, float w, float h, const std::string &texturePath);
-		void draw();
+		void draw() const;
 
-		inline float getX() const { return _x; };
-		inline float getY() const { return _y; };
-		inline float getWidth() const { return _w; };
-		inline float getHeight() const { return _h; };
+		float getX() const { return _x; };
+		float getY() const { return _y; };
+		float getWidth() const { return _w; };
+		float getHeight() const { return _h; };
 	};
 }

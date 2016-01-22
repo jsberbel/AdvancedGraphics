@@ -6,51 +6,51 @@ namespace SerraEngine {
 const int FPSLimiter::NUM_SAMPLES = 10;
 
 FPSLimiter::FPSLimiter() :
-	_fps(0), 
-	_targetFPS(120.0f), 
-	_startTicks(0),
-	_frameTicks(0) {}
+	m_fps(0), 
+	m_targetFPS(120.0f), 
+	m_startTicks(0),
+	m_frameTicks(0) {}
 
 FPSLimiter::FPSLimiter(float targetFPS) : 
-	_fps(0),
-	_targetFPS(targetFPS),
-	_startTicks(0),
-	_frameTicks(0) {}
+	m_fps(0),
+	m_targetFPS(targetFPS),
+	m_startTicks(0),
+	m_frameTicks(0) {}
 
 void FPSLimiter::calculateFPS() {
 	static float frameTimes[NUM_SAMPLES];
-	static int curFrame = 0;
+	static auto curFrame = 0;
 
 	static auto prevTicks = SDL_GetTicks();
 	auto curTicks = SDL_GetTicks();
 
-	frameTimes[curFrame] = (float)(curTicks - prevTicks);
+	frameTimes[curFrame] = static_cast<float>(curTicks - prevTicks);
 	prevTicks = curTicks;
 
-	static int count = 0;
+	static auto count = 0;
 	curFrame++;
 	if (count < NUM_SAMPLES) count = curFrame;
 	else count = NUM_SAMPLES;
 	if (curFrame == NUM_SAMPLES) curFrame = 0/*, std::cout << _fps << std::endl*/;
 
 	float frameTimeAverage = 0;
-	for (int i = 0; i < count; i++) frameTimeAverage += frameTimes[i];
+	for (auto i = 0; i < count; i++) frameTimeAverage += frameTimes[i];
 	frameTimeAverage /= count;
 
-	if (frameTimeAverage > 0) _fps = 1000.0f / frameTimeAverage;
-	else _fps = 60.0f;
+	if (frameTimeAverage > 0) m_fps = 1000.0f / frameTimeAverage;
+	else m_fps = 60.0f;
 }
 
 void FPSLimiter::getFPS() const {
-	static int fpsTimer = 0;
-	if (fpsTimer == 10) fpsTimer = 0, std::cout << _fps << std::endl;
+	static auto fpsTimer = 0;
+	if (fpsTimer == 10) fpsTimer = 0, std::cout << m_fps << std::endl;
 	fpsTimer++;
 }
 
 void FPSLimiter::end() {
 	calculateFPS();
-	_frameTicks = SDL_GetTicks() - _startTicks;
-	if (1000.0f / _targetFPS > _frameTicks) SDL_Delay((Uint32)(1000.0f / _targetFPS - _frameTicks));
+	m_frameTicks = SDL_GetTicks() - m_startTicks;
+	if (1000.0f / m_targetFPS > m_frameTicks) SDL_Delay(static_cast<Uint32>(1000.0f / m_targetFPS - m_frameTicks));
 }
 
 }

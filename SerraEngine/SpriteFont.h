@@ -24,9 +24,7 @@
 #ifndef SpriteFont_h__
 #define SpriteFont_h__
 
-#include <SDL_ttf/SDL_ttf.h>
 #include <glm/glm.hpp>
-#include <map>
 #include <vector>
 
 #include "Vertex.h"
@@ -37,7 +35,6 @@ namespace SerraEngine {
     class SpriteBatch;
 
     struct CharGlyph {
-    public:
         char character;
         glm::vec4 uvRect;
         glm::vec2 size;
@@ -65,7 +62,7 @@ namespace SerraEngine {
         }
 
         /// Measures the dimensions of the text
-        glm::vec2 measure(const char* s);
+        glm::vec2 measure(const char* s) const;
 
         /// Draws using a spritebatch
         void draw(SpriteBatch& batch, const char* s, glm::vec2 position, glm::vec2 scaling, 

@@ -2,23 +2,25 @@
 #include "ErrorManager.h"
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 namespace SerraEngine {
 
 	GLSLManager::GLSLManager() : 
-		_programID(0), 
-		_vertexShaderID(0), 
-		_fragmentShaderID(0),
-		_numAttributes(0) {}
+		m_programID(0), 
+		m_vertexShaderID(0), 
+		m_fragmentShaderID(0),
+		m_numAttributes(0) {}
 
 	GLSLManager::~GLSLManager()
 	{
-		if (_vertexShaderID != 0) glDeleteShader(_vertexShaderID);
-		if (_fragmentShaderID != 0) glDeleteShader(_fragmentShaderID);
-		if (_programID != 0) glDeleteProgram(_programID);
+		if (m_vertexShaderID != 0) glDeleteShader(m_vertexShaderID);
+		if (m_fragmentShaderID != 0) glDeleteShader(m_fragmentShaderID);
+		if (m_programID != 0) glDeleteProgram(m_programID);
 	}
 
-	void GLSLManager::compileShader(const std::string &filePath, GLuint id) {
+	void GLSLManager::compileShader(const std::string &filePath, GLuint id) const
+	{
 		std::ifstream shaderFile(filePath);
 		if (shaderFile.fail()) {
 			perror(filePath.c_str());
@@ -30,13 +32,13 @@ namespace SerraEngine {
 			fileContents += line + "\n";
 		}
 		shaderFile.close();
-		const char* contentsPtr = fileContents.c_str();
+		const auto contentsPtr = fileContents.c_str();
 		glShaderSource(id, 1, &contentsPtr, nullptr);
 		glCompileShader(id);
-		GLint success = 0;
+		auto success = 0;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 		if (success == GL_FALSE) {
-			GLint maxLength = 0;
+			auto maxLength = 0;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
 			std::vector<char> errorLog(maxLength);
 			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
@@ -47,47 +49,49 @@ namespace SerraEngine {
 	}
 
 	void GLSLManager::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
-		_programID = glCreateProgram();
-		_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-		if (_vertexShaderID == 0) errorRunTime("Vertex shader failed to be created.");
-		_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-		if (_fragmentShaderID == 0) errorRunTime("Fragment shader failed to be created.");
+		m_programID = glCreateProgram();
+		m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+		if (m_vertexShaderID == 0) errorRunTime("Vertex shader failed to be created.");
+		m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+		if (m_fragmentShaderID == 0) errorRunTime("Fragment shader failed to be created.");
 
-		compileShader(vertexShaderFilePath, _vertexShaderID);
-		compileShader(fragmentShaderFilePath, _fragmentShaderID);
+		compileShader(vertexShaderFilePath, m_vertexShaderID);
+		compileShader(fragmentShaderFilePath, m_fragmentShaderID);
 	}
 
-	void GLSLManager::linkShaders() {
-		glAttachShader(_programID, _vertexShaderID);
-		glAttachShader(_programID, _fragmentShaderID);
-		glLinkProgram(_programID);
+	void GLSLManager::linkShaders() const
+	{
+		glAttachShader(m_programID, m_vertexShaderID);
+		glAttachShader(m_programID, m_fragmentShaderID);
+		glLinkProgram(m_programID);
 
-		GLint isLinked = 0;
-		glGetProgramiv(_programID, GL_LINK_STATUS, (int*)&isLinked);
+		auto isLinked = 0;
+		glGetProgramiv(m_programID, GL_LINK_STATUS, static_cast<int*>(&isLinked));
 		if (isLinked == GL_FALSE) {
-			GLint maxLength = 0;
-			glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &maxLength);
+			auto maxLength = 0;
+			glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &maxLength);
 			std::vector<char> errorLog(maxLength);
-			glGetProgramInfoLog(_programID, maxLength, &maxLength, &errorLog[0]);
-			glDeleteProgram(_programID);
-			glDeleteShader(_vertexShaderID);
-			glDeleteShader(_fragmentShaderID);
+			glGetProgramInfoLog(m_programID, maxLength, &maxLength, &errorLog[0]);
+			glDeleteProgram(m_programID);
+			glDeleteShader(m_vertexShaderID);
+			glDeleteShader(m_fragmentShaderID);
 			std::cout << &errorLog[0] << std::endl;
 			errorRunTime("Program failed to be compiled.");
 		}
 
-		glDetachShader(_programID, _vertexShaderID);
-		glDetachShader(_programID, _fragmentShaderID);
-		glDeleteShader(_vertexShaderID);
-		glDeleteShader(_fragmentShaderID);
+		glDetachShader(m_programID, m_vertexShaderID);
+		glDetachShader(m_programID, m_fragmentShaderID);
+		glDeleteShader(m_vertexShaderID);
+		glDeleteShader(m_fragmentShaderID);
 	}
 
 	void GLSLManager::addAttribute(const std::string& attributeName) {
-		glBindAttribLocation(_programID, _numAttributes++, attributeName.c_str());
+		glBindAttribLocation(m_programID, m_numAttributes++, attributeName.c_str());
 	}
 
-	GLint GLSLManager::getUniformLocation(const std::string & uniformName) {
-		GLint location = glGetUniformLocation(_programID, uniformName.c_str());
+	GLint GLSLManager::getUniformLocation(const std::string & uniformName) const
+	{
+		auto location = glGetUniformLocation(m_programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX) {
 			errorRunTime("Uniform " + uniformName + " not found on shader");
 			return 0;
@@ -95,16 +99,18 @@ namespace SerraEngine {
 		return location;
 	}
 
-	void GLSLManager::bind() {
-		glUseProgram(_programID);
-		for (int i = 0; i < _numAttributes; i++) {
+	void GLSLManager::bind() const
+	{
+		glUseProgram(m_programID);
+		for (auto i = 0; i < m_numAttributes; i++) {
 			glEnableVertexAttribArray(i);
 		}
 	}
 
-	void GLSLManager::unbind() {
+	void GLSLManager::unbind() const
+	{
 		glUseProgram(0);
-		for (int i = 0; i < _numAttributes; i++) {
+		for (auto i = 0; i < m_numAttributes; i++) {
 			glDisableVertexAttribArray(i);
 		}
 	}

@@ -5,20 +5,20 @@
 namespace SerraEngine {
 	class GLSLManager
 	{
-		GLuint _programID;
-		GLuint _vertexShaderID;
-		GLuint _fragmentShaderID;
-		int _numAttributes;
-		void compileShader(const std::string &filePath, GLuint id);
+		GLuint m_programID;
+		GLuint m_vertexShaderID;
+		GLuint m_fragmentShaderID;
+		int m_numAttributes;
+		void compileShader(const std::string &filePath, GLuint id) const;
 	public:
 		explicit GLSLManager();
 		~GLSLManager();
 		void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
-		void linkShaders();
+		void linkShaders() const;
 		void addAttribute(const std::string& attributeName);
-		GLint getUniformLocation(const std::string &uniformName);
-		void bind();
-		void unbind();
+		GLint getUniformLocation(const std::string &uniformName) const;
+		void bind() const;
+		void unbind() const;
 	};
 }
 

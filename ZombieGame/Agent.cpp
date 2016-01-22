@@ -9,9 +9,12 @@ const float Agent::AGENT_RADIUS = Agent::AGENT_WIDTH / 2.0f;
 Agent::Agent(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color) :
 	_position(position),
 	_speed(speed),
-	_color(color) {}
+	_color(color), 
+	_health(100)
+{}
 
-void Agent::pushBatch(SerraEngine::SpriteBatch & spriteBatch) {
+void Agent::pushBatch(SerraEngine::SpriteBatch & spriteBatch) const
+{
 	glm::vec4 destRect(_position.x, _position.y, AGENT_WIDTH, AGENT_WIDTH);
 	const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static int textureID = SerraEngine::ResourceManager::getTexture("Textures/circle.png").id;
@@ -35,7 +38,7 @@ bool Agent::collideWithLevel(const std::vector<std::string>& lvlData, bool dirCo
 	}
 	if (!collideTilePositions.size()) return false;
 
-	for (const glm::vec2 &ctp : collideTilePositions) AABBCollideWithTile(ctp);
+	for (const auto& ctp : collideTilePositions) AABBCollideWithTile(ctp);
 
 	return true;
 }
@@ -47,16 +50,16 @@ bool Agent::collideWithAgent(Agent* agent) {
 	// Is the Agent too far away in the Y direction to check?
 	if (agent->_position.y < _position.y - AGENT_WIDTH || agent->_position.y > _position.y + AGENT_WIDTH) return false;
 
-	const float MIN_DISTANCE = AGENT_WIDTH; // This used to be AGENT_RADIUS * 2
+	const auto MIN_DISTANCE = AGENT_WIDTH; // This used to be AGENT_RADIUS * 2
 
-	glm::vec2 centerPosA = _position + glm::vec2(AGENT_RADIUS); // Center position of this agent
-	glm::vec2 centerPosB = agent->getPosition() + glm::vec2(AGENT_RADIUS); // Center position of the parameter agent
-	glm::vec2 distVec = centerPosA - centerPosB; // Distance vector between the two agents
+	auto centerPosA = _position + glm::vec2(AGENT_RADIUS); // Center position of this agent
+	auto centerPosB = agent->getPosition() + glm::vec2(AGENT_RADIUS); // Center position of the parameter agent
+	auto distVec = centerPosA - centerPosB; // Distance vector between the two agents
 
-	float distance = glm::length(distVec); // Length of the distance vector
-	float collisionDepth = MIN_DISTANCE - distance; // Depth of the collision
+	auto distance = glm::length(distVec); // Length of the distance vector
+	auto collisionDepth = MIN_DISTANCE - distance; // Depth of the collision
 	if (collisionDepth > 0) {
-		glm::vec2 collisionDepthVec = glm::normalize(distVec)*collisionDepth; // Get direction times collision depth so as to push away from each other
+		auto collisionDepthVec = glm::normalize(distVec)*collisionDepth; // Get direction times collision depth so as to push away from each other
 		_position += collisionDepthVec / 2.0f;
 		agent->_position -= collisionDepthVec / 2.0f;
 		return true;
@@ -70,29 +73,31 @@ bool Agent::applyDamage(int damage) {
 	return false;
 }
 
-void Agent::checkTilePosition(const std::vector<std::string>& lvlData, std::vector<glm::vec2> &collideTilePositions, float x, float y) {
+void Agent::checkTilePosition(const std::vector<std::string>& lvlData, std::vector<glm::vec2> &collideTilePositions, float x, float y) const
+{
 	// Get position of parameter corner in grid-space
-	glm::vec2 cornerPos = glm::vec2(floor(x / (float)Level::TILE_WIDTH),
-									floor(y / (float)Level::TILE_WIDTH));
+	auto cornerPos = glm::vec2(floor(x / static_cast<float>(Level::TILE_WIDTH)),
+									floor(y / static_cast<float>(Level::TILE_WIDTH)));
 
 	if (cornerPos.x < 0 || cornerPos.x >= lvlData[0].size() ||
 		cornerPos.y < 0 || cornerPos.y >= lvlData.size()) return;
 
 	// If is not a ground tile, push corner position to vector
-	if (lvlData[(unsigned)cornerPos.y][(unsigned)cornerPos.x] != '.') {
-		collideTilePositions.push_back(cornerPos*(float)Level::TILE_WIDTH + glm::vec2((float)Level::TILE_WIDTH / 2.0f));
+	if (lvlData[static_cast<unsigned>(cornerPos.y)][static_cast<unsigned>(cornerPos.x)] != '.') {
+		collideTilePositions.push_back(cornerPos*static_cast<float>(Level::TILE_WIDTH) + glm::vec2(static_cast<float>(Level::TILE_WIDTH) / 2.0f));
 	}
 }
 
 void Agent::AABBCollideWithTile(glm::vec2 tilePos) {
-	const float TILE_RADIUS = (float)Level::TILE_WIDTH / 2.0f;
-	const float MIN_DISTANCE = AGENT_RADIUS + TILE_RADIUS;
+	const auto TILE_RADIUS = static_cast<float>(Level::TILE_WIDTH) / 2.0f;
+	const auto MIN_DISTANCE = AGENT_RADIUS + TILE_RADIUS;
 
-	glm::vec2 centerPlayerPos = _position + glm::vec2(AGENT_RADIUS); // Center position of the agent
-	glm::vec2 distVec = centerPlayerPos - tilePos; // Vector from the agent to the tile
+	auto centerPlayerPos = _position + glm::vec2(AGENT_RADIUS); // Center position of the agent
+	auto distVec = centerPlayerPos - tilePos; // Vector from the agent to the tile
+	
 	// Get collision depth
-	float xDepth = MIN_DISTANCE - abs(distVec.x);
-	float yDepth = MIN_DISTANCE - abs(distVec.y);
+	auto xDepth = MIN_DISTANCE - abs(distVec.x);
+	auto yDepth = MIN_DISTANCE - abs(distVec.y);
 
 	if (xDepth > 0 && yDepth > 0) {
 		// Check which collision depth is less
