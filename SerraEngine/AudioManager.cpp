@@ -11,8 +11,8 @@ void SoundEffect::play(int loops) const
 		if (AudioManager::curChannel == AudioManager::maxChannels) AudioManager::curChannel = 0;
 		if (Mix_PlayChannel(AudioManager::curChannel, m_chunk, loops) == -1) {
 			fatalError("Mix_PlayChannel error: " + std::string(Mix_GetError()));
-			AudioManager::curChannel++;
 		}
+		AudioManager::curChannel++;
 	}
 }
 
@@ -21,30 +21,14 @@ void Music::play(int loops) const
 	if (Mix_PlayMusic(m_music, loops) == -1) fatalError("Mix_PlayMusic error: " + std::string(Mix_GetError()));
 }
 
-void Music::pause()
-{
-	Mix_PauseMusic();
-}
-
-void Music::stop()
-{
-	Mix_HaltMusic();
-}
-
-void Music::resume()
-{
-	Mix_ResumeMusic();
-}
-
 AudioManager::~AudioManager()
 {
-	for (auto e = m_effectMap.begin(), end = m_effectMap.end(); e != end; ++e) if (!e->second) Mix_FreeChunk(e->second);
-	for (auto m = m_musicMap.begin(), end = m_musicMap.end(); m != end; ++m) if (!m->second) Mix_FreeMusic(m->second);
 	destroy();
 }
 
 void AudioManager::init()
 {
+	if (m_isInitialized) fatalError("Audio Manager error: Trying to initialize Audio Manager twice!");
 	//Can be bitwise combination of: MIX_INIT_FAC, MIX_INIT_MOD, MIX_INIT_MP3, MIX_INIT_OGG
 	if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == -1) fatalError("Mix_Init error: " + std::string(Mix_GetError()));
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) == -1) fatalError("Mix_OpenAudio error: " + std::string(Mix_GetError()));
@@ -56,6 +40,12 @@ void AudioManager::destroy()
 {
 	if (m_isInitialized) {
 		m_isInitialized = false;
+		Mix_AllocateChannels(0);
+		for (auto &e : m_effectMap) Mix_FreeChunk(e.second);
+		for (auto &m : m_musicMap) Mix_FreeMusic(m.second);
+		m_effectMap.clear();
+		m_musicMap.clear();
+		Mix_CloseAudio();
 		Mix_Quit();
 	}
 }
@@ -79,7 +69,7 @@ SoundEffect AudioManager::loadSoundEffect(const std::string& filePath)
 		if (chunk == nullptr) fatalError("Mix_LoadWAV error: " + std::string(Mix_GetError()));
 		m_effectMap[filePath] = chunk;
 		effect.m_chunk = chunk;
-		Mix_VolumeChunk(effect.m_chunk, effectsVolume);
+		Mix_VolumeChunk(effect.m_chunk, m_effectsVolume);
 	} else effect.m_chunk = it->second;
 	return effect;
 }
@@ -93,7 +83,7 @@ Music AudioManager::loadMusic(const std::string & filePath)
 		if (m == nullptr) fatalError("Mix_LoadMusic error: " + std::string(Mix_GetError()));
 		m_musicMap[filePath] = m;
 		mus.m_music = m;
-		Mix_VolumeMusic(musicVolume);
+		Mix_VolumeMusic(m_musicVolume);
 	}
 	else mus.m_music = it->second;
 	return mus;

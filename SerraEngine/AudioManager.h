@@ -24,9 +24,10 @@ public:
 	explicit Music() = default;
 	~Music() = default;
 	void play(int loops = -1) const; //if loops = -1 -> loop forever, else play it loops times
-	static void pause();
-	static void stop();
-	static void resume();
+	static void pause() { Mix_PauseMusic(); };
+	static void stop() { Mix_HaltMusic(); };
+	static void resume() { Mix_ResumeMusic(); };
+	static int isPlaying() { return Mix_PlayingMusic(); };
 	friend class AudioManager;
 };
 
@@ -35,8 +36,8 @@ class AudioManager
 	std::map <std::string, Mix_Chunk*> m_effectMap;
 	std::map <std::string, Mix_Music*> m_musicMap;
 	bool m_isInitialized = false;
-	int effectsVolume = static_cast<int>(MIX_MAX_VOLUME * 0.3f);
-	int musicVolume = static_cast<int>(MIX_MAX_VOLUME * 0.5f);
+	int m_effectsVolume = static_cast<int>(MIX_MAX_VOLUME * 0.3f);
+	int m_musicVolume = static_cast<int>(MIX_MAX_VOLUME * 0.5f);
 public:
 	static const int maxChannels = 16;
 	static int curChannel; //0
@@ -48,7 +49,9 @@ public:
 	void destroy();
 
 	void setEffectsVolume(int v);
+	int getEffectsVolume() const { return m_effectsVolume; };
 	static void setMusicVolume(int v);
+	int getMusicVolume() const { return m_musicVolume; };
 
 	SoundEffect loadSoundEffect(const std::string &filePath);
 	Music loadMusic(const std::string &filePath);

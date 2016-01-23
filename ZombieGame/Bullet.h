@@ -24,5 +24,6 @@ public:
 	bool collideWithAgent(Agent* agent) const;
 	
 	int getDamage() const { return m_damage; };
+	glm::vec2 getPosition() const { return m_position; };
 };
 

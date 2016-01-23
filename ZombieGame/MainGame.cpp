@@ -1,9 +1,10 @@
 #include "MainGame.h"
 #include <SerraEngine/SerraEngine.h>
 #include <SerraEngine/Timing.h>
+#include <SerraEngine/ResourceManager.h>
+#define GLM_FORCE_RADIANS
+#include <glm/gtx/rotate_vector.hpp>
 #include <SDL/SDL.h>
-#include <iostream>
-#include <random>
 #include <ctime>
 #include <algorithm>
 #include "Zombie.h"
@@ -15,14 +16,14 @@ MainGame::MainGame(const std::string &name, int screenWidth, int m_screenHeight)
 	m_window(screenWidth, m_screenHeight, name),
 	m_camera(screenWidth, m_screenHeight),
 	m_HUDcamera(screenWidth, m_screenHeight),
-	m_spriteFont(nullptr),
+	m_spriteFont(nullptr), 
+	m_bloodParticleBatch(nullptr),
 	m_player(nullptr) {}
 
 MainGame::~MainGame() {
-	for (auto l : m_levels) if (!l) delete l, l = nullptr;
-	for (auto h : m_humans) if (!h) delete h, h = nullptr;
-	for (auto z : m_zombies) if (!z) delete z, z = nullptr;
-	if (!m_player) delete m_player, m_player = nullptr;
+	for (auto l : m_levels) if (l != nullptr) delete l, l = nullptr;
+	for (auto h : m_humans) if (h != nullptr) delete h, h = nullptr;
+	for (auto z : m_zombies) if (z != nullptr) delete z, z = nullptr;
 }
 
 void MainGame::run() {
@@ -36,13 +37,18 @@ void MainGame::initSystems() {
 	m_window.createWindow(SerraEngine::ColorRGBA8{125, 125, 125, 255});
 	m_audioManager.init();
 	initShaders();
-	m_agentsBatch.init();
+	m_mainSpriteBatch.init();
 	m_HUDBatch.init();
 	m_HUDcamera.setPosition(glm::vec2(m_screenWidth*0.5f, m_screenHeight*0.5f));
 	m_spriteFont = std::make_unique<SerraEngine::SpriteFont>("Fonts/ComickBook_Simple.ttf", 64);
 
-	auto music = m_audioManager.loadMusic("Sound/XYZ.ogg");
-	music.play();
+	//m_bloodParticleBatch = std::make_unique<SerraEngine::ParticleBatch2D>();
+	m_bloodParticleBatch = new SerraEngine::ParticleBatch2D();
+	m_bloodParticleBatch->init(1000, 0.05f, SerraEngine::ResourceManager::getTexture("Textures/particle.png").id);
+	m_particleEngine.addParticleBatch(m_bloodParticleBatch);
+
+	m_curMusic = m_audioManager.loadMusic("Sound/XYZ.ogg");
+	m_curMusic.play();
 }
 
 void MainGame::initLevel() {
@@ -53,14 +59,13 @@ void MainGame::initLevel() {
 	m_player = new Player(m_levels[m_curLevel]->getStartPlayerPos(), PLAYER_SPEED, m_inputManager, m_camera, m_bullets);
 	m_humans.push_back(m_player);
 	
-	std::mt19937 randomEngine;
-	randomEngine.seed(static_cast<unsigned>(time(nullptr)));
+	m_randomEngine.seed(static_cast<unsigned>(time(nullptr)));
 	std::uniform_int_distribution<int> randX(2, static_cast<int>(m_levels[m_curLevel]->getWidth())-2);
 	std::uniform_int_distribution<int> randY(2, static_cast<int>(m_levels[m_curLevel]->getHeight())-2);
 	
 	//Add humans
 	for (auto i = 0, end = m_levels[m_curLevel]->getNumHumans(); i < end; i++) {
-		glm::vec2 newPos(randX(randomEngine)*Level::TILE_WIDTH, randY(randomEngine)*Level::TILE_WIDTH);
+		glm::vec2 newPos(randX(m_randomEngine)*Level::TILE_WIDTH, randY(m_randomEngine)*Level::TILE_WIDTH);
 		m_humans.push_back(new Human(newPos, HUMAN_SPEED));
 	}
 
@@ -78,7 +83,7 @@ void MainGame::initLevel() {
 }
 
 void MainGame::initShaders() {
-    // Compile our color shader
+    //Compile our color shader
     m_textureProgram.compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
     m_textureProgram.addAttribute("vertexPosition");
     m_textureProgram.addAttribute("vertexColor");
@@ -86,22 +91,47 @@ void MainGame::initShaders() {
     m_textureProgram.linkShaders();
 }
 
-void MainGame::updateAgents(float deltaTime) {
-	//Update humans
-	for (const auto h : m_humans) h->update(deltaTime, m_levels[m_curLevel]->getLevelData());
-	/*for (auto i = _humans.begin(), end = _humans.end(); i != end; ++i) {
-		for (auto j = std::next(i, 1), end = _humans.end(); j != end; ++j) {
-			(*i)->collideWithAgent(*j);
+void MainGame::gameLoop() {
+	SerraEngine::FPSLimiter fpsLimiter(DESIRED_FPS);
+
+	while (m_gameState != GameState::EXIT) {
+		switch (m_gameState) {
+		case GameState::PLAY:
+			fpsLimiter.begin();
+				checkEndGame();
+				processInput();
+				updateGame();
+				drawGame();
+				fpsLimiter.getFPS();
+			fpsLimiter.end();
+			break;
+		case GameState::GAMEOVER:
+			gameOver();
+			break;
+		default: break;
 		}
-	}*/
+	}
+}
+
+void MainGame::updateAgents(float deltaTime) {
+	/*--------------------
+		UPDATE HUMANS
+	--------------------*/
+	//Update rand position
+	for (const auto h : m_humans) h->update(deltaTime, m_levels[m_curLevel]->getLevelData());
+	//Check collisions between other humans
 	for (unsigned i = 0; i < m_humans.size(); i++) {
 		for (auto j = i+1; j < m_humans.size(); j++) {
 			m_humans[i]->collideWithAgent(m_humans[j]);
 		}
 	}
 
-	//Update zombies
+	/*--------------------
+		UPDATE ZOMBIES
+	--------------------*/
+	//Update position seeking humans
 	for (const auto z : m_zombies) z->update(deltaTime, m_levels[m_curLevel]->getLevelData(), m_humans);
+	//Check collisions between other zombies and humans
 	for (unsigned i = 0; i < m_zombies.size(); i++) {
 		for (auto j = i+1; j < m_zombies.size(); j++) {
 			m_zombies[i]->collideWithAgent(m_zombies[j]);
@@ -114,11 +144,7 @@ void MainGame::updateAgents(float deltaTime) {
 					m_humans[j] = m_humans.back();
 					m_humans.pop_back();
 				}
-				else {
-					std::cout << "Zombies ate your brain" << std::endl;
-					system("pause");
-					m_gameState = GameState::EXIT;
-				}
+				else m_playerDead = true, m_gameState = GameState::GAMEOVER;
 			}
 		}
 	}
@@ -136,12 +162,13 @@ void MainGame::updateBullets(float deltaTime) {
 		else i++;
 	}
 
-	bool isBulletRemoved = false;
+	auto isBulletRemoved = false;
 	// Collide with humans and zombies
 	for (unsigned i = 0; i < m_bullets.size(); i++) {
 		// Check zombies
 		for (unsigned j = 0; j < m_zombies.size();) {
 			if (m_bullets[i].collideWithAgent(m_zombies[j])) {
+				addBlood(m_bullets[i].getPosition(), 5); //blood particle system
 				if (m_zombies[j]->applyDamage(m_bullets[i].getDamage())) { //if zombie dies
 					delete m_zombies[j];
 					m_zombies[j] = m_zombies.back();
@@ -160,6 +187,7 @@ void MainGame::updateBullets(float deltaTime) {
 		if (!isBulletRemoved) {
 			for (unsigned j = 1; j < m_humans.size();) {
 				if (m_bullets[i].collideWithAgent(m_humans[j])) {
+					addBlood(m_bullets[i].getPosition(), 5); //blood particle system
 					if (m_humans[j]->applyDamage(m_bullets[i].getDamage())) { //if human dies
 						delete m_humans[j];
 						m_humans[j] = m_humans.back();
@@ -191,6 +219,7 @@ void MainGame::updateGame() {
 		auto deltaTime = std::min(totalDeltaTime, MAX_DELTATIME);
 		updateAgents(deltaTime);
 		updateBullets(deltaTime);
+		m_particleEngine.update(deltaTime);
 		totalDeltaTime -= deltaTime;
 	}
 	m_camera.setPosition(m_player->getPosition() + Agent::AGENT_RADIUS);
@@ -198,18 +227,14 @@ void MainGame::updateGame() {
 	m_HUDcamera.update();
 }
 
-void MainGame::gameLoop() {
-	SerraEngine::FPSLimiter fpsLimiter(DESIRED_FPS);
+void MainGame::gameOver() {
+	m_inputManager.update();
+	if (m_inputManager.isKeyDown(SDLK_ESCAPE)) m_gameState = GameState::EXIT;
 
-	while (m_gameState != GameState::EXIT) {
-		fpsLimiter.begin();
-			checkEndGame();
-			processInput();
-			updateGame();
-			drawGame();
-			fpsLimiter.getFPS();
-		fpsLimiter.end();
-	}
+	SDL_Event evnt;
+	while (SDL_PollEvent(&evnt)) if (evnt.type == SDL_QUIT) m_gameState = GameState::EXIT;
+
+	if (m_curMusic.isPlaying()) m_curMusic.stop();
 }
 
 void MainGame::processInput() {
@@ -274,18 +299,20 @@ void MainGame::drawGame() {
 	//Draw current level
 	m_levels[m_curLevel]->draw();
 
-	m_agentsBatch.begin();
+	m_mainSpriteBatch.begin();
 
 	//Draw the agents
 	const glm::vec2 agentDims(Agent::AGENT_RADIUS*2.0f);
-	for (const auto h : m_humans) if (m_camera.isBoxInView(h->getPosition(), agentDims)) h->pushBatch(m_agentsBatch);
-	for (const auto z : m_zombies) if (m_camera.isBoxInView(z->getPosition(), agentDims)) z->pushBatch(m_agentsBatch);
+	for (const auto h : m_humans) if (m_camera.isBoxInView(h->getPosition(), agentDims)) h->pushBatch(m_mainSpriteBatch);
+	for (const auto z : m_zombies) if (m_camera.isBoxInView(z->getPosition(), agentDims)) z->pushBatch(m_mainSpriteBatch);
 
 	//Draw bullets
-	for (auto &b : m_bullets) b.pushBatch(m_agentsBatch);
+	for (auto &b : m_bullets) b.pushBatch(m_mainSpriteBatch);
 
-	m_agentsBatch.end();
-	m_agentsBatch.renderBatch();
+	m_mainSpriteBatch.end();
+	m_mainSpriteBatch.renderBatch();
+
+	m_particleEngine.draw(m_mainSpriteBatch);
 
 	drawHUD();
    
@@ -301,7 +328,12 @@ void MainGame::drawHUD() {
 	auto projectionMatrix = m_HUDcamera.getCameraMatrix();
 	glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, &projectionMatrix[0][0]);
 	m_HUDBatch.begin();
-		sprintf_s(buffer, "Num humans: %d", m_humans.size());
+		if (m_playerDead) {
+			strcpy_s(buffer, "ZOMBIES ATE YOUR BRAIN");
+			m_spriteFont->draw(m_HUDBatch, buffer, glm::vec2(m_screenWidth*0.5f, m_screenHeight*0.5f), glm::vec2(0.7f), 0.0f,
+				SerraEngine::ColorRGBA8(150, 0, 0, 255), SerraEngine::Justification::MIDDLE);
+		}
+		sprintf_s(buffer, "Num humans: %d", m_humans.size()-1);
 		m_spriteFont->draw(m_HUDBatch, buffer, glm::vec2(50, 50), glm::vec2(0.5f), 0.0f,
 			SerraEngine::ColorRGBA8(255,255,255,255));
 	m_HUDBatch.end();
@@ -313,8 +345,19 @@ void MainGame::checkEndGame() {
 	// _curLevel++; initLevel()...
 
 	if (m_zombies.empty()) {
-		std::printf("*** YOU WIN! ***\nYou killed %d humans and %d zombies. You saved %d/%d civilians remaining.\n", m_numHumansKilled, m_numZombiesKilled, m_humans.size() - 1, m_levels[m_curLevel]->getNumHumans());
+		printf("*** YOU WIN! ***\nYou killed %d humans and %d zombies. You saved %d/%d civilians remaining.\n", 
+			m_numHumansKilled, m_numZombiesKilled, m_humans.size() - 1, m_levels[m_curLevel]->getNumHumans());
 		system("pause");
 		m_gameState = GameState::EXIT;
+	}
+}
+
+void MainGame::addBlood(const glm::vec2 & position, int numParticles) {
+	static std::uniform_real_distribution<float> randAngle(0.0f, 360.0f);
+
+	glm::vec2 vel(2.0f, 0.0f);
+	SerraEngine::ColorRGBA8 col(200, 0, 0, 255);
+	for (auto i = 0; i < numParticles; i++) {
+		m_bloodParticleBatch->addParticle(position, glm::rotate(vel, randAngle(m_randomEngine)), 20.0f, col);
 	}
 }
