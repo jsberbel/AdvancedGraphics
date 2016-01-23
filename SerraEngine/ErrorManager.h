@@ -2,7 +2,7 @@
 #include <string>
 
 namespace SerraEngine {
-	extern void errorRunTime(const std::string &errorString);
+	extern void fatalError(const std::string &errorString);
 }
 
 

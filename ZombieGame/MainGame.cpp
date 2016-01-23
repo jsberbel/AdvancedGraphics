@@ -33,13 +33,16 @@ void MainGame::run() {
 
 void MainGame::initSystems() {
 	SerraEngine::init();
-	m_window.createWindow(SerraEngine::ColorRGBA8{200, 200, 200, 255});
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	m_window.createWindow(SerraEngine::ColorRGBA8{125, 125, 125, 255});
+	m_audioManager.init();
 	initShaders();
 	m_agentsBatch.init();
 	m_HUDBatch.init();
 	m_HUDcamera.setPosition(glm::vec2(m_screenWidth*0.5f, m_screenHeight*0.5f));
 	m_spriteFont = std::make_unique<SerraEngine::SpriteFont>("Fonts/ComickBook_Simple.ttf", 64);
+
+	auto music = m_audioManager.loadMusic("Sound/XYZ.ogg");
+	music.play();
 }
 
 void MainGame::initLevel() {
@@ -58,21 +61,20 @@ void MainGame::initLevel() {
 	//Add humans
 	for (auto i = 0, end = m_levels[m_curLevel]->getNumHumans(); i < end; i++) {
 		glm::vec2 newPos(randX(randomEngine)*Level::TILE_WIDTH, randY(randomEngine)*Level::TILE_WIDTH);
-		m_humans.emplace_back(new Human(newPos, HUMAN_SPEED));
+		m_humans.push_back(new Human(newPos, HUMAN_SPEED));
 	}
 
 	//Add zombies
 	const auto &zombiePositions = m_levels[m_curLevel]->getStartZombiesPos();
 	for (auto pos = zombiePositions.begin(), end = zombiePositions.end(); pos != end; ++pos) {
-		glm::vec2 newPos(randX(randomEngine)*Level::TILE_WIDTH, randY(randomEngine)*Level::TILE_WIDTH);
-		m_zombies.push_back(new Zombie(newPos, ZOMBIE_SPEED));
+		m_zombies.push_back(new Zombie(*pos, ZOMBIE_SPEED));
 	}
 	
 	//Add guns
 	const auto BULLET_SPEED = 20.0f;
-	m_player->addGun(new Gun("Magnum", 10, 1, 5.0f, BULLET_SPEED, 30));
-	m_player->addGun(new Gun("Shotgun", 30, 12, 20.0f, BULLET_SPEED, 10));
-	m_player->addGun(new Gun("MP5", 2, 1, 10.0f, BULLET_SPEED, 20));
+	m_player->addGun(new Gun("Magnum", 10, 1, 5.0f, BULLET_SPEED, 30, m_audioManager.loadSoundEffect(("Sound/shots/pistol.wav"))));
+	m_player->addGun(new Gun("Shotgun", 30, 12, 20.0f, BULLET_SPEED, 10, m_audioManager.loadSoundEffect(("Sound/shots/shotgun.wav"))));
+	m_player->addGun(new Gun("MP5", 2, 1, 10.0f, BULLET_SPEED, 20, m_audioManager.loadSoundEffect(("Sound/shots/cg1.wav"))));
 }
 
 void MainGame::initShaders() {

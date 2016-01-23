@@ -32,8 +32,8 @@ public:
 	bool applyDamage(int damage); //return true if dead
 
 	//getters
-	inline const glm::vec2 &getPosition() const { return _position; };
-	inline float getSpeed() const { return _speed; };
+	const glm::vec2 &getPosition() const { return _position; };
+	float getSpeed() const { return _speed; };
 
 	//setters
 	//inline void setPosition(const glm::vec2 &position) { _position = position; };

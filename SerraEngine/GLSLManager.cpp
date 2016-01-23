@@ -24,7 +24,7 @@ namespace SerraEngine {
 		std::ifstream shaderFile(filePath);
 		if (shaderFile.fail()) {
 			perror(filePath.c_str());
-			errorRunTime("Failed to open: " + filePath);
+			fatalError("Failed to open: " + filePath);
 		}
 		std::string fileContents = "";
 		std::string line;
@@ -44,16 +44,16 @@ namespace SerraEngine {
 			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
 			glDeleteShader(id);
 			std::cout << &errorLog[0] << std::endl;
-			errorRunTime("Shader " + filePath + " failed to be compiled.");
+			fatalError("Shader " + filePath + " failed to be compiled.");
 		}
 	}
 
 	void GLSLManager::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
 		m_programID = glCreateProgram();
 		m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-		if (m_vertexShaderID == 0) errorRunTime("Vertex shader failed to be created.");
+		if (m_vertexShaderID == 0) fatalError("Vertex shader failed to be created.");
 		m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-		if (m_fragmentShaderID == 0) errorRunTime("Fragment shader failed to be created.");
+		if (m_fragmentShaderID == 0) fatalError("Fragment shader failed to be created.");
 
 		compileShader(vertexShaderFilePath, m_vertexShaderID);
 		compileShader(fragmentShaderFilePath, m_fragmentShaderID);
@@ -76,7 +76,7 @@ namespace SerraEngine {
 			glDeleteShader(m_vertexShaderID);
 			glDeleteShader(m_fragmentShaderID);
 			std::cout << &errorLog[0] << std::endl;
-			errorRunTime("Program failed to be compiled.");
+			fatalError("Program failed to be compiled.");
 		}
 
 		glDetachShader(m_programID, m_vertexShaderID);
@@ -93,7 +93,7 @@ namespace SerraEngine {
 	{
 		auto location = glGetUniformLocation(m_programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX) {
-			errorRunTime("Uniform " + uniformName + " not found on shader");
+			fatalError("Uniform " + uniformName + " not found on shader");
 			return 0;
 		}
 		return location;

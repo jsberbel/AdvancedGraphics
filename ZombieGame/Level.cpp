@@ -9,7 +9,7 @@ Level::Level(const std::string& fileName) : m_numHumans(0)
 {
 	std::ifstream file;
 	file.open(fileName);
-	if (file.fail()) SerraEngine::errorRunTime("Failed to open " + fileName);
+	if (file.fail()) SerraEngine::fatalError("Failed to open " + fileName);
 
 	std::string tmp;
 	file >> tmp >> m_numHumans;

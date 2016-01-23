@@ -5,6 +5,7 @@
 #include <SerraEngine/InputManager.h>
 #include <SerraEngine/SpriteBatch.h>
 #include <SerraEngine/SpriteFont.h>
+#include <SerraEngine/AudioManager.h>
 #include "Player.h"
 #include "Level.h"
 #include "Bullet.h"
@@ -34,6 +35,7 @@ class MainGame
 	SerraEngine::SpriteBatch m_agentsBatch;
 	SerraEngine::SpriteBatch m_HUDBatch;
 	std::unique_ptr<SerraEngine::SpriteFont> m_spriteFont;
+	SerraEngine::AudioManager m_audioManager;
 
 	Player* m_player;
 	std::vector<Human*> m_humans; //vector of all humans

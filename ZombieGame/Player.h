@@ -10,7 +10,7 @@ class Gun;
 
 class Player : public Human
 {
-	const SerraEngine::ColorRGBA8 PLAYER_COLOR = SerraEngine::ColorRGBA8{ 0,0, 185, 255 };
+	static const SerraEngine::ColorRGBA8 PLAYER_COLOR;
 	SerraEngine::InputManager &m_inputManager;
 	SerraEngine::Camera2D &m_camera;
 	std::vector<Bullet> &m_bullets;

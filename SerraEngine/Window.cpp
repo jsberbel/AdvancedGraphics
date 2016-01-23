@@ -25,7 +25,7 @@ namespace SerraEngine {
 		else if (curFlags & FULLSCREEN) flags |= SDL_WINDOW_HIDDEN;
 		else if (curFlags & BORDERLESS) flags |= SDL_WINDOW_HIDDEN;
 		m_SDLWindow = SDL_CreateWindow(m_engineName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_screenWidth, m_screenHeight, flags);
-		if (m_SDLWindow == nullptr) errorRunTime("SDL Window could not be created.");
+		if (m_SDLWindow == nullptr) fatalError("SDL Window could not be created.");
 	};
 
 	//========================================================
@@ -49,11 +49,11 @@ namespace SerraEngine {
 		else if (curFlags & FULLSCREEN) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		else if (curFlags & BORDERLESS) flags |= SDL_WINDOW_BORDERLESS;
 		m_SDLWindow = SDL_CreateWindow(m_engineName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_screenWidth, m_screenHeight, flags);
-		if (m_SDLWindow == nullptr) errorRunTime("SDL Window could not be created.");
+		if (m_SDLWindow == nullptr) fatalError("SDL Window could not be created.");
 		m_glContext = SDL_GL_CreateContext(m_SDLWindow);
-		if (m_glContext == nullptr) errorRunTime("SDL_GL Context could not be created.");
+		if (m_glContext == nullptr) fatalError("SDL_GL Context could not be created.");
 		auto error = glewInit();
-		if (error != GLEW_OK) errorRunTime("GLEW could not be initialized.");
+		if (error != GLEW_OK) fatalError("GLEW could not be initialized.");
 		printf("***  OpenGL Version: %s  ***\n", reinterpret_cast<char const*>(glGetString(GL_VERSION)));
 		glClearColor(static_cast<float>(c.r)/255, static_cast<float>(c.g) / 255, static_cast<float>(c.b) / 255, static_cast<float>(c.a) / 255); //Set background color
 		SDL_GL_SetSwapInterval(0); //Set V-Sync

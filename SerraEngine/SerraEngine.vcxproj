@@ -173,6 +173,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="ErrorManager.h" />
     <ClInclude Include="SpriteFont.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="ErrorManager.cpp" />
     <ClCompile Include="SpriteFont.cpp" />

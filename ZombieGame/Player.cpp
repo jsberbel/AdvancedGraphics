@@ -2,6 +2,8 @@
 #include "Gun.h"
 #include <SDL/SDL.h>
 
+const SerraEngine::ColorRGBA8 Player::PLAYER_COLOR = SerraEngine::ColorRGBA8{ 0,0, 185, 255 };
+
 Player::Player(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager, SerraEngine::Camera2D &camera, std::vector<Bullet> &bullets) :
 	Human(position, speed, PLAYER_COLOR),
 	m_inputManager(inputManager),

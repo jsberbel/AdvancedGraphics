@@ -1,6 +1,6 @@
 #include "SpriteFont.h"
 #include "SpriteBatch.h"
-#include <SDL_ttf/SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 #include <map>
 #include <SDL/SDL.h>
 
