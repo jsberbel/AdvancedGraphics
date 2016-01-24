@@ -10,7 +10,6 @@ class Gun;
 
 class Player : public Human
 {
-	static const SerraEngine::ColorRGBA8 PLAYER_COLOR;
 	SerraEngine::InputManager &m_inputManager;
 	SerraEngine::Camera2D &m_camera;
 	std::vector<Bullet> &m_bullets;
@@ -18,7 +17,7 @@ class Player : public Human
 	int m_currentGun;
 public:
 	explicit Player() = default;
-	explicit Player(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager, SerraEngine::Camera2D &camera, std::vector<Bullet> &bullets);
+	explicit Player(const glm::vec2 & position, float speed, SerraEngine::InputManager &inputManager, SerraEngine::Camera2D &camera, std::vector<Bullet> &bullets, const SerraEngine::ColorRGBA8 &color = SerraEngine::ColorRGBA8{ 255, 255, 255, 255 });
 	~Player();
 	void update(float deltaTime = 0.0f,
 				const std::vector<std::string>& lvlData = std::vector<std::string>(),

@@ -1,15 +1,18 @@
 #pragma once
 #include "Agent.h"
-#include <list>
 
 class Zombie : public Agent
 {
+	glm::vec2 m_startDir = glm::vec2(1.0f, 0.0f);
+	glm::vec2 m_endDir = glm::vec2(1.0f, 0.0f);
+	float m_countDir = 0.0f;
+	glm::vec2 m_closestHumanPos = glm::vec2(0.0f, 0.0f);
+	glm::vec2 m_prevHumanPos = glm::vec2(0.0f, 0.0f);
 	Human* getNearestHuman(const std::vector<Human*>& humans) const;
 public:
 	explicit Zombie() = default;
-	explicit Zombie(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color = SerraEngine::ColorRGBA8{ 180, 0, 0, 255 });
+	explicit Zombie(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color = SerraEngine::ColorRGBA8{ 255, 255, 255, 255 });
 	~Zombie() = default;
-	using Agent::update;
 	void update(float deltaTime = 0.0f,
 				const std::vector<std::string>& lvlData = std::vector<std::string>(),
 				const std::vector<Human*>& humans = std::vector<Human*>()) override;

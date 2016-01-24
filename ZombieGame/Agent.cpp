@@ -7,18 +7,18 @@ const float Agent::AGENT_WIDTH = 60.0f;
 const float Agent::AGENT_RADIUS = Agent::AGENT_WIDTH / 2.0f;
 
 Agent::Agent(const glm::vec2 & position, float speed, const SerraEngine::ColorRGBA8 &color) :
-	_position(position),
-	_speed(speed),
-	_color(color), 
-	_health(100)
-{}
+	m_position(position),
+	m_speed(speed),
+	m_color(color), 
+	m_health(100) {
+	m_textureID = SerraEngine::ResourceManager::getTexture("Textures/circle.png").id;
+}
 
 void Agent::pushBatch(SerraEngine::SpriteBatch & spriteBatch) const
 {
-	glm::vec4 destRect(_position.x, _position.y, AGENT_WIDTH, AGENT_WIDTH);
+	glm::vec4 destRect(m_position.x, m_position.y, AGENT_WIDTH, AGENT_WIDTH);
 	const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
-	static int textureID = SerraEngine::ResourceManager::getTexture("Textures/circle.png").id;
-	spriteBatch.pushBatch(destRect, uvRect, textureID, 0.0f, _color);
+	spriteBatch.pushBatch(destRect, uvRect, m_textureID, 0.0f, m_color, m_direction);
 }
 
 bool Agent::collideWithLevel(const std::vector<std::string>& lvlData, bool dirCol) {
@@ -26,15 +26,15 @@ bool Agent::collideWithLevel(const std::vector<std::string>& lvlData, bool dirCo
 	
 	//calc direction to avoid stop bug
 	if (dirCol) {
-		checkTilePosition(lvlData, collideTilePositions, _position.x, _position.y); //first corner
-		checkTilePosition(lvlData, collideTilePositions, _position.x + AGENT_WIDTH, _position.y); //second corner
-		checkTilePosition(lvlData, collideTilePositions, _position.x, _position.y + AGENT_WIDTH); //third corner
-		checkTilePosition(lvlData, collideTilePositions, _position.x + AGENT_WIDTH, _position.y + AGENT_WIDTH); //fourth corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x, m_position.y); //first corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x + AGENT_WIDTH, m_position.y); //second corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x, m_position.y + AGENT_WIDTH); //third corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x + AGENT_WIDTH, m_position.y + AGENT_WIDTH); //fourth corner
 	} else {
-		checkTilePosition(lvlData, collideTilePositions, _position.x, _position.y + AGENT_WIDTH); //third corner
-		checkTilePosition(lvlData, collideTilePositions, _position.x + AGENT_WIDTH, _position.y + AGENT_WIDTH); //fourth corner
-		checkTilePosition(lvlData, collideTilePositions, _position.x, _position.y); //first corner
-		checkTilePosition(lvlData, collideTilePositions, _position.x + AGENT_WIDTH, _position.y); //second corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x, m_position.y + AGENT_WIDTH); //third corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x + AGENT_WIDTH, m_position.y + AGENT_WIDTH); //fourth corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x, m_position.y); //first corner
+		checkTilePosition(lvlData, collideTilePositions, m_position.x + AGENT_WIDTH, m_position.y); //second corner
 	}
 	if (!collideTilePositions.size()) return false;
 
@@ -45,14 +45,14 @@ bool Agent::collideWithLevel(const std::vector<std::string>& lvlData, bool dirCo
 
 bool Agent::collideWithAgent(Agent* agent) {
 	// Is the Agent too far away in the X direction to check?
-	if (agent->_position.x < _position.x - AGENT_WIDTH || agent->_position.x > _position.x + AGENT_WIDTH) return false;
+	if (agent->m_position.x < m_position.x - AGENT_WIDTH || agent->m_position.x > m_position.x + AGENT_WIDTH) return false;
 
 	// Is the Agent too far away in the Y direction to check?
-	if (agent->_position.y < _position.y - AGENT_WIDTH || agent->_position.y > _position.y + AGENT_WIDTH) return false;
+	if (agent->m_position.y < m_position.y - AGENT_WIDTH || agent->m_position.y > m_position.y + AGENT_WIDTH) return false;
 
 	const auto MIN_DISTANCE = AGENT_WIDTH; // This used to be AGENT_RADIUS * 2
 
-	auto centerPosA = _position + glm::vec2(AGENT_RADIUS); // Center position of this agent
+	auto centerPosA = m_position + glm::vec2(AGENT_RADIUS); // Center position of this agent
 	auto centerPosB = agent->getPosition() + glm::vec2(AGENT_RADIUS); // Center position of the parameter agent
 	auto distVec = centerPosA - centerPosB; // Distance vector between the two agents
 
@@ -60,16 +60,16 @@ bool Agent::collideWithAgent(Agent* agent) {
 	auto collisionDepth = MIN_DISTANCE - distance; // Depth of the collision
 	if (collisionDepth > 0) {
 		auto collisionDepthVec = glm::normalize(distVec)*collisionDepth; // Get direction times collision depth so as to push away from each other
-		_position += collisionDepthVec / 2.0f;
-		agent->_position -= collisionDepthVec / 2.0f;
+		m_position += collisionDepthVec / 2.0f;
+		agent->m_position -= collisionDepthVec / 2.0f;
 		return true;
 	}
 	return false;
 }
 
 bool Agent::applyDamage(int damage) {
-	_health -= damage;
-	if (_health <= 0) return true;
+	m_health -= damage;
+	if (m_health <= 0) return true;
 	return false;
 }
 
@@ -92,7 +92,7 @@ void Agent::AABBCollideWithTile(glm::vec2 tilePos) {
 	const auto TILE_RADIUS = static_cast<float>(Level::TILE_WIDTH) / 2.0f;
 	const auto MIN_DISTANCE = AGENT_RADIUS + TILE_RADIUS;
 
-	auto centerPlayerPos = _position + glm::vec2(AGENT_RADIUS); // Center position of the agent
+	auto centerPlayerPos = m_position + glm::vec2(AGENT_RADIUS); // Center position of the agent
 	auto distVec = centerPlayerPos - tilePos; // Vector from the agent to the tile
 	
 	// Get collision depth
@@ -103,13 +103,17 @@ void Agent::AABBCollideWithTile(glm::vec2 tilePos) {
 		// Check which collision depth is less
 		if (std::max(xDepth, 0.0f) < std::max(yDepth, 0.0f)) {
 			// X collsion depth is smaller so we push in X direction
-			if (distVec.x < 0) _position.x -= xDepth;
-			else _position.x += xDepth;
+			if (distVec.x < 0) m_position.x -= xDepth;
+			else m_position.x += xDepth;
 		}
 		else {
 			// Y collsion depth is smaller so we push in X direction
-			if (distVec.y < 0) _position.y -= yDepth;
-			else _position.y += yDepth;
+			if (distVec.y < 0) m_position.y -= yDepth;
+			else m_position.y += yDepth;
 		}
 	}
+}
+
+glm::vec2 Agent::Nlerp(const glm::vec2 &start, const glm::vec2 &end, float count) {
+	return glm::normalize(start + count*(end - start));
 }

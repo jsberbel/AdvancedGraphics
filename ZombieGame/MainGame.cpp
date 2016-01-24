@@ -44,7 +44,12 @@ void MainGame::initSystems() {
 
 	//m_bloodParticleBatch = std::make_unique<SerraEngine::ParticleBatch2D>();
 	m_bloodParticleBatch = new SerraEngine::ParticleBatch2D();
-	m_bloodParticleBatch->init(1000, 0.05f, SerraEngine::ResourceManager::getTexture("Textures/particle.png").id);
+	m_bloodParticleBatch->init(1000, 0.05f, 
+		SerraEngine::ResourceManager::getTexture("Textures/particle.png").id, 
+		[](SerraEngine::Particle2D& particle, float deltaTime) {
+		particle.position += particle.velocity*deltaTime;
+		particle.color.a = static_cast<GLubyte>(particle.life * 255.0f);
+	});
 	m_particleEngine.addParticleBatch(m_bloodParticleBatch);
 
 	m_curMusic = m_audioManager.loadMusic("Sound/XYZ.ogg");

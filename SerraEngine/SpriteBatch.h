@@ -14,6 +14,7 @@ enum class GlyphSortType {
 };
 
 class Glyph {
+	glm::vec2 rotatePoint(glm::vec2 pos, float angle) const;
 public:
 	GLuint texture;
 	float depth;
@@ -23,26 +24,8 @@ public:
 	Vertex bottomRight;
 
 	explicit Glyph() = default;
-	explicit Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color) :
-		texture(texture_),
-		depth(depth_) 
-	{
-		topLeft.setColor(color);
-		topLeft.setPosition(destRect.x, destRect.y + destRect.w);
-		topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
-
-		bottomLeft.setColor(color);
-		bottomLeft.setPosition(destRect.x, destRect.y);
-		bottomLeft.setUV(uvRect.x, uvRect.y);
-
-		bottomRight.setColor(color);
-		bottomRight.setPosition(destRect.x + destRect.z, destRect.y);
-		bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
-
-		topRight.setColor(color);
-		topRight.setPosition(destRect.x + destRect.z, destRect.y + destRect.w);
-		topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-	};
+	explicit Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color);
+	explicit Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color, float angle);
 };
 
 struct RenderBatch {
@@ -82,6 +65,8 @@ public:
 	void begin(GlyphSortType sortType = GlyphSortType::TEXTURE);
 	void end();
 	void pushBatch(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color);
+	void pushBatch(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, float angle);
+	void pushBatch(const glm::vec4 & destRect, const glm::vec4 & uvRect, GLuint texture, float depth, const ColorRGBA8 & color, const glm::vec2 &dir);
 	void renderBatch();
 };
 
