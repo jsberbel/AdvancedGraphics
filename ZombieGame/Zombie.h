@@ -6,8 +6,7 @@ class Zombie : public Agent
 	glm::vec2 m_startDir = glm::vec2(1.0f, 0.0f);
 	glm::vec2 m_endDir = glm::vec2(1.0f, 0.0f);
 	float m_countDir = 0.0f;
-	glm::vec2 m_closestHumanPos = glm::vec2(0.0f, 0.0f);
-	glm::vec2 m_prevHumanPos = glm::vec2(0.0f, 0.0f);
+	Human* m_prevHuman = nullptr;
 	Human* getNearestHuman(const std::vector<Human*>& humans) const;
 public:
 	explicit Zombie() = default;

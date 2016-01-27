@@ -69,5 +69,5 @@ Level::Level(const std::string& fileName) : m_numHumans(0)
 }
 
 void Level::draw() {
-	m_lvlBatch.renderBatch();
+	m_lvlBatch.renderBatches();
 }

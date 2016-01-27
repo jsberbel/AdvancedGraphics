@@ -4,10 +4,10 @@
 namespace SerraEngine {
 
 Camera2D::Camera2D() :
-	m_screenWidth(0),
-	m_screenHeight(0),
+	m_screenWidth(600),
+	m_screenHeight(600),
 	m_needsMatrixUpdate(true), 
-	m_scale(0.0f), 
+	m_scale(1.0f), 
 	m_position(0.0f, 0.0f),
 	m_cameraMatrix(1.0f),
 	m_orthoMatrix(1.0f)

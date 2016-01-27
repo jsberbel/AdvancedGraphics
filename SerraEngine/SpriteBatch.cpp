@@ -110,7 +110,7 @@ void SpriteBatch::pushBatch(const glm::vec4 & destRect, const glm::vec4 & uvRect
 	m_glyphs.emplace_back(texture, depth, destRect, uvRect, color, angle);
 }
 
-void SpriteBatch::renderBatch() {
+void SpriteBatch::renderBatches() {
 	glBindVertexArray(m_vao);
 	for (const auto &rb : m_renderBatches) {
 		glBindTexture(GL_TEXTURE_2D, rb.texture);

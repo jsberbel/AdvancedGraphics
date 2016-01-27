@@ -38,7 +38,7 @@ public:
 	void init(int maxParticles, float decayRate, const GLuint &texture, std::function<void(Particle2D&, float)> updateFunction = defaultParticleUpdate);
 	void addParticle(const glm::vec2 &position, const glm::vec2 &velocity, float width, const ColorRGBA8 &color = ColorRGBA8(255, 255, 255, 255));
 
-	void draw(SpriteBatch &spriteBatch) const;
+	void pushBatch(SpriteBatch &spriteBatch) const;
 	void update(float deltaTime) const;
 };
 

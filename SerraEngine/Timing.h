@@ -18,7 +18,8 @@ public:
 	~FPSLimiter() = default;
 
 	void setTargetFPS(float targetFPS) { m_targetFPS = targetFPS; };
-	void getFPS() const;
+	void printFPS() const;
+	float getFPS() const { return m_fps; };
 
 	void begin() { m_startTicks = SDL_GetTicks(); };
 	void end();

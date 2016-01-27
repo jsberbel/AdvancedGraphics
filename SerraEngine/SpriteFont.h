@@ -31,7 +31,7 @@
 
 namespace SerraEngine {
 
-    class GLTexture;
+    struct GLTexture;
     class SpriteBatch;
 
     struct CharGlyph {

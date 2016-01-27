@@ -34,7 +34,7 @@ void MainGame::run() {
 
 void MainGame::initSystems() {
 	SerraEngine::init();
-	m_window.createWindow(SerraEngine::ColorRGBA8{125, 125, 125, 255});
+	m_window.create(SerraEngine::ColorRGBA8{125, 125, 125, 255});
 	m_audioManager.init();
 	initShaders();
 	m_mainSpriteBatch.init();
@@ -107,7 +107,7 @@ void MainGame::gameLoop() {
 				processInput();
 				updateGame();
 				drawGame();
-				fpsLimiter.getFPS();
+				fpsLimiter.printFPS();
 			fpsLimiter.end();
 			break;
 		case GameState::GAMEOVER:
@@ -303,7 +303,17 @@ void MainGame::drawGame() {
 
 	//Draw current level
 	m_levels[m_curLevel]->draw();
+	drawAssets();
+	m_particleEngine.draw(m_mainSpriteBatch);
+	drawHUD();
+   
+	m_textureProgram.unbind();
 
+    // Swap our buffer and draw everything to the screen!
+    m_window.swapBuffer();
+}
+
+void MainGame::drawAssets() {
 	m_mainSpriteBatch.begin();
 
 	//Draw the agents
@@ -315,16 +325,7 @@ void MainGame::drawGame() {
 	for (auto &b : m_bullets) b.pushBatch(m_mainSpriteBatch);
 
 	m_mainSpriteBatch.end();
-	m_mainSpriteBatch.renderBatch();
-
-	m_particleEngine.draw(m_mainSpriteBatch);
-
-	drawHUD();
-   
-	m_textureProgram.unbind();
-
-    // Swap our buffer and draw everything to the screen!
-    m_window.swapBuffer();
+	m_mainSpriteBatch.renderBatches();
 }
 
 void MainGame::drawHUD() {
@@ -342,7 +343,7 @@ void MainGame::drawHUD() {
 		m_spriteFont->draw(m_HUDBatch, buffer, glm::vec2(50, 50), glm::vec2(0.5f), 0.0f,
 			SerraEngine::ColorRGBA8(255,255,255,255));
 	m_HUDBatch.end();
-	m_HUDBatch.renderBatch();
+	m_HUDBatch.renderBatches();
 }
 
 void MainGame::checkEndGame() {

@@ -41,7 +41,7 @@ void FPSLimiter::calculateFPS() {
 	else m_fps = 60.0f;
 }
 
-void FPSLimiter::getFPS() const {
+void FPSLimiter::printFPS() const {
 	static auto fpsTimer = 0;
 	if (fpsTimer == 10) fpsTimer = 0, std::cout << m_fps << std::endl;
 	fpsTimer++;

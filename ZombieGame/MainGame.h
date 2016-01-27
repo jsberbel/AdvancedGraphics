@@ -64,6 +64,7 @@ class MainGame
 	void gameOver();
 	void processInput();
 	void drawGame();
+	void drawAssets();
 	void drawHUD();
 	void checkEndGame();
 	void addBlood(const glm::vec2 &position, int numParticles);

@@ -50,6 +50,7 @@ namespace SerraEngine {
 
 	void GLSLManager::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
 		m_programID = glCreateProgram();
+		//if (m_programID == 0) fatalError("GLProgram failed to be created.");
 		m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		if (m_vertexShaderID == 0) fatalError("Vertex shader failed to be created.");
 		m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);

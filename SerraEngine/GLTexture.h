@@ -2,9 +2,8 @@
 #include <GL\glew.h>
 
 namespace SerraEngine {
-	class GLTexture
+	struct GLTexture
 	{
-	public:
 		GLuint id;
 		int width;
 		int height;

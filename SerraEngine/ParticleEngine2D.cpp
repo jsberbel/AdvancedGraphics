@@ -19,12 +19,10 @@ void ParticleEngine2D::update(float deltaTime) {
 }
 
 void ParticleEngine2D::draw(SpriteBatch &spriteBatch) {
-	for (auto b : m_batches) {
-		spriteBatch.begin();
-			b->draw(spriteBatch);
-		spriteBatch.end();
-		spriteBatch.renderBatch();
-	}
+	spriteBatch.begin();
+	for (auto b : m_batches) b->pushBatch(spriteBatch);
+	spriteBatch.end();
+	spriteBatch.renderBatches();
 }
 
 }

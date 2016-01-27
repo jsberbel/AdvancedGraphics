@@ -48,7 +48,7 @@ void ParticleBatch2D::addParticle(const glm::vec2 & position, const glm::vec2 & 
 	
 }
 
-void ParticleBatch2D::draw(SpriteBatch &spriteBatch) const {
+void ParticleBatch2D::pushBatch(SpriteBatch &spriteBatch) const {
 	glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	for (auto i = 0; i < m_maxParticles; i++) {
 		auto &p = m_particles[i];
