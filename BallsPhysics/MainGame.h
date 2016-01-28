@@ -18,11 +18,12 @@ enum class GameState { RUNNING, EXIT };
 class MainGame {
 public:
 	MainGame() = default;
-	~MainGame() = default;
+	~MainGame();
     void run();
 
 private:
     void init();
+	void initRenderers();
     void initBalls();
     void update(float deltaTime);
     void draw();
@@ -36,7 +37,9 @@ private:
 	std::unique_ptr<Grid> m_grid; ///< Grid for spatial partitioning for collisions
 
     BallController m_ballController; ///< Controls balls
-    BallRenderer m_ballRenderer; ///< Renders balls
+
+	int m_currentRenderer = 0;
+	std::vector<BallRenderer*> m_ballRenderers;
 
 	SerraEngine::GLWindow m_window; ///< The main window
 	SerraEngine::SpriteBatch m_spriteBatch; ///< Renders all the balls

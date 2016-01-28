@@ -16,6 +16,10 @@ const float DESIRED_FRAMETIME = MS_PER_SECOND / DESIRED_FPS; // The desired fram
 const float MAX_DELTA_TIME = 1.0f; // Maximum size of deltaTime
 const int CELL_SIZE = 12;
 
+MainGame::~MainGame() {
+	for (auto br : m_ballRenderers) delete br;
+}
+
 void MainGame::run() {
     init();
     initBalls();
@@ -83,6 +87,15 @@ void MainGame::init() {
 	m_spriteBatch.init();
 
     m_fpsLimiter.setTargetFPS(120.0f);
+
+	initRenderers();
+}
+
+void MainGame::initRenderers() {
+	m_ballRenderers.push_back(new BallRenderer);
+	m_ballRenderers.push_back(new MomentumBallRenderer);
+	m_ballRenderers.push_back(new VelocityBallRenderer(m_screenWidth, m_screenHeight));
+	m_ballRenderers.push_back(new TrippyBallRenderer(m_screenWidth, m_screenHeight));
 }
 
 struct BallSpawn {
@@ -124,13 +137,26 @@ void MainGame::initBalls() {
     std::vector <BallSpawn> possibleBalls;
 	auto totalProbability = 0.0f;
 
+	std::uniform_real_distribution<float> r1(2.0f, 6.0f);
+	std::uniform_int_distribution<int> r2(0, 255);
+
     // Adds the balls using a macro
-    ADD_BALL(20.0f, SerraEngine::ColorRGBA8(255, 255, 255, 255),
-             2.0f, 1.0f, 0.1f, 7.0f, totalProbability);
-    ADD_BALL(10.0f, SerraEngine::ColorRGBA8(0, 0, 255, 255),
-             3.0f, 2.0f, 0.1f, 3.0f, totalProbability);
-    ADD_BALL(1.0f, SerraEngine::ColorRGBA8(255, 0, 0, 255),
-             5.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+	ADD_BALL(1.0f, SerraEngine::ColorRGBA8(255, 255, 255, 255),
+		2.0f, 1.0f, 0.1f, 7.0f, totalProbability);
+	ADD_BALL(1.0f, SerraEngine::ColorRGBA8(1, 254, 145, 255),
+		2.0f, 2.0f, 0.1f, 3.0f, totalProbability);
+	ADD_BALL(1.0f, SerraEngine::ColorRGBA8(177, 0, 254, 255),
+		3.0f, 4.0f, 0.0f, 0.0f, totalProbability)
+	ADD_BALL(1.0f, SerraEngine::ColorRGBA8(254, 0, 0, 255),
+			3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+	ADD_BALL(1.0f, SerraEngine::ColorRGBA8(0, 255, 255, 255),
+		3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+	ADD_BALL(1.0f, SerraEngine::ColorRGBA8(255, 255, 0, 255),
+		3.0f, 4.0f, 0.0f, 0.0f, totalProbability);
+	for (auto i = 0; i < 10000; i++) {
+		ADD_BALL(1.0f, SerraEngine::ColorRGBA8(r2(randomEngine), r2(randomEngine), r2(randomEngine), 255),
+			r1(randomEngine), r1(randomEngine), 0.0f, 0.0f, totalProbability);
+	}
 
     // Random probability for ball spawn
     std::uniform_real_distribution<float> spawn(0.0f, totalProbability);
@@ -184,9 +210,9 @@ void MainGame::draw() {
     glActiveTexture(GL_TEXTURE0);
 
     // Grab the camera matrix
-    glm::mat4 projectionMatrix = m_camera.getCameraMatrix();
+    auto projectionMatrix = m_camera.getCameraMatrix();
     
-	m_ballRenderer.renderBalls(m_spriteBatch, m_balls, projectionMatrix); //multiple renderers
+	m_ballRenderers[m_currentRenderer]->renderBalls(m_spriteBatch, m_balls, projectionMatrix); //multiple renderers
 
 	m_textureProgram.bind();
 
@@ -219,6 +245,7 @@ void MainGame::drawHud() {
 }
 
 void MainGame::processInput() {
+	m_inputManager.update();
     SDL_Event evnt;
     //Will keep looping until there are no more events to process
     while (SDL_PollEvent(&evnt)) {
@@ -262,4 +289,10 @@ void MainGame::processInput() {
     } else if (m_inputManager.isKeyPressed(SDLK_SPACE)) {
         m_ballController.setGravityDirection(GravityDirection::NONE);
     }
+
+	// Switch renderers
+	if (m_inputManager.isKeyPressed(SDLK_1)) {
+		m_currentRenderer++;
+		if (m_currentRenderer >= m_ballRenderers.size()) m_currentRenderer = 0;
+	}
 }

@@ -21,7 +21,7 @@ public:
 
 	void addBall(Ball* ball);
 	void addBall(Ball* ball, Cell* cell) const;
-	void removeBallFromCell(Ball* ball);
+	void removeBallFromCell(Ball* ball) const;
 	Cell* getCell(int x, int y);
 	Cell* getCell(const glm::vec2 &pos);
 

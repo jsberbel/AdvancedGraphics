@@ -29,7 +29,7 @@ void Grid::addBall(Ball* ball, Cell * cell) const {
 	ball->cellVectorIndex = cell->balls.size() - 1;
 }
 
-void Grid::removeBallFromCell(Ball * ball) {
+void Grid::removeBallFromCell(Ball * ball) const {
 	auto& rBalls = ball->ownerCell->balls;
 	rBalls[ball->cellVectorIndex] = rBalls.back();
 	rBalls.pop_back();
