@@ -7,6 +7,7 @@ namespace SerraEngine {
 		SDL_Init(SDL_INIT_EVERYTHING);
 		//tell we want a double buffered windows to avoid flickering
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		return 0;
 	}
 

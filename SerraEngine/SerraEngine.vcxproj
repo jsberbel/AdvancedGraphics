@@ -176,8 +176,11 @@
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="ErrorManager.h" />
+    <ClInclude Include="IMainGame.h" />
+    <ClInclude Include="IGameScreen.h" />
     <ClInclude Include="ParticleBatch2D.h" />
     <ClInclude Include="ParticleEngine2D.h" />
+    <ClInclude Include="ScreenList.h" />
     <ClInclude Include="SpriteFont.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="GLSLManager.h" />
@@ -198,8 +201,10 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="ErrorManager.cpp" />
+    <ClCompile Include="IMainGame.cpp" />
     <ClCompile Include="ParticleBatch2D.cpp" />
     <ClCompile Include="ParticleEngine2D.cpp" />
+    <ClCompile Include="ScreenList.cpp" />
     <ClCompile Include="SpriteFont.cpp" />
     <ClCompile Include="Timing.cpp" />
     <ClCompile Include="GLSLManager.cpp" />
@@ -212,6 +217,9 @@
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="TextureCache.cpp" />
     <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

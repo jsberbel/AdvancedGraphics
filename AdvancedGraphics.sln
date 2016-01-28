@@ -15,6 +15,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BallsPhysics", "BallsPhysic
 		{7481C316-00B2-4FDC-A876-A4B550BC61AD} = {7481C316-00B2-4FDC-A876-A4B550BC61AD}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NinjaPlatformer", "NinjaPlatformer\NinjaPlatformer.vcxproj", "{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7481C316-00B2-4FDC-A876-A4B550BC61AD} = {7481C316-00B2-4FDC-A876-A4B550BC61AD}
+		{5C9B06E0-78D7-47AB-879D-EED0FD10A66B} = {5C9B06E0-78D7-47AB-879D-EED0FD10A66B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -47,6 +53,14 @@ Global
 		{5C9B06E0-78D7-47AB-879D-EED0FD10A66B}.Release|x64.Build.0 = Release|x64
 		{5C9B06E0-78D7-47AB-879D-EED0FD10A66B}.Release|x86.ActiveCfg = Release|Win32
 		{5C9B06E0-78D7-47AB-879D-EED0FD10A66B}.Release|x86.Build.0 = Release|Win32
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Debug|x64.ActiveCfg = Debug|x64
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Debug|x64.Build.0 = Debug|x64
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Debug|x86.ActiveCfg = Debug|Win32
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Debug|x86.Build.0 = Debug|Win32
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Release|x64.ActiveCfg = Release|x64
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Release|x64.Build.0 = Release|x64
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Release|x86.ActiveCfg = Release|Win32
+		{D6C03CAA-CBEA-49D7-BFB8-1960556E09A3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

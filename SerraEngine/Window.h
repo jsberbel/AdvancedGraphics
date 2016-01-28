@@ -21,6 +21,8 @@ namespace SerraEngine {
 		void changeSize(const int &sw, const int &sh) const { SDL_SetWindowSize(m_SDLWindow, sw, sh); };
 		SDL_Window* getWindow() const { return m_SDLWindow; };
 		void swapBuffer() const { SDL_GL_SwapWindow(m_SDLWindow); };
+		int getScreenWidth() const { return m_screenWidth; };
+		int getScreenHeight() const { return m_screenHeight; };
 	};
 
 	class GLWindow : public Window {

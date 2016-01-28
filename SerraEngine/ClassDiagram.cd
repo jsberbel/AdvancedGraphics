@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SerraEngine::SoundEffect" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAgAAAAAAAAAAAAAAAAACAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>AudioManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::AudioManager" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAICAAEAMAAAAACYABgEAUAGAABA=</HashCode>
+      <FileName>AudioManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::Music" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAEAAAAAAAAAAAAAAAAAAACgAAAEAAAIAAAAIAA=</HashCode>
+      <FileName>AudioManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::Camera2D" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BgAAIAAYACAAAKgAAAAEAAACQAIgACICAAAAAAAEAAA=</HashCode>
+      <FileName>Camera2D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::Particle2D" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAQAAAIAAAAAAAAACAAAQAAAAAAAA=</HashCode>
+      <FileName>ParticleBatch2D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::ParticleBatch2D" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAgAAABAAgAAAAACBIAAIAIAAAAAAEABQ=</HashCode>
+      <FileName>ParticleBatch2D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::SpriteBatch" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACgAAAAKAAAIAAAQBAAAQAAQAAACCBICQGAEAAAAAAA=</HashCode>
+      <FileName>SpriteBatch.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::ParticleEngine2D" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAIAAAAAAAAIAAAAAAAAAQAEAIA=</HashCode>
+      <FileName>ParticleEngine2D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::SpriteFont" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAACEIAAgAAIgAAAAAAAAAEAAACQAAIAAAAA=</HashCode>
+      <FileName>SpriteFont.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::FPSLimiter" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAICAQAQAAAIAAAACAAQAAAQAAAAgAAAABAQAAI=</HashCode>
+      <FileName>Timing.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::GLSLManager" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAIAAAEAAAAAAAgIAAEAAAAAEYAARQA=</HashCode>
+      <FileName>GLSLManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::ImageLoader" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageLoader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::InputManager" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAEAAAAAgAAAAAAgApIAFAAAAAIAAEAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::IOManager" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IOManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::ResourceManager" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::Sprite" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAIAQQAAAAAAAIAAAACAAAAQAIQAAAQCGAAAAI=</HashCode>
+      <FileName>Sprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::Glyph" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAEAAAgAAAAIAIAIAEAA=</HashCode>
+      <FileName>SpriteBatch.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::TextureCache" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAkAAAAAAAAAAAAAAAAAAAAAAEAAAAAI=</HashCode>
+      <FileName>TextureCache.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::Window" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYAAAAAAAAAAAAAAAAAAAAAAQQIAAAgAAABACABAIAA=</HashCode>
+      <FileName>Window.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::GLWindow" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAABCEAAAAAA=</HashCode>
+      <FileName>Window.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SerraEngine::IGameScreen" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEAACAAAAAAAAAIAAAIAEFQAAAAAAAAAAIAAABAFBAA=</HashCode>
+      <FileName>IGameScreen.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="SerraEngine::GLTexture" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>GLTexture.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SerraEngine::CharGlyph" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAgAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SpriteFont.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SerraEngine::RenderBatch" Collapsed="true">
+    <Position X="10" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAIAAABAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>SpriteBatch.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SerraEngine::Position" Collapsed="true">
+    <Position X="8.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SerraEngine::ColorRGBA8" Collapsed="true">
+    <Position X="4.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAQEBAAAAAAA=</HashCode>
+      <FileName>Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SerraEngine::UV" Collapsed="true">
+    <Position X="3" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJIAAAAAAAA=</HashCode>
+      <FileName>Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SerraEngine::Vertex" Collapsed="true">
+    <Position X="4.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAABAAAAAAAAIAACAAAAAACAAAAAAAAIAgA=</HashCode>
+      <FileName>Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="SerraEngine::Justification" Collapsed="true">
+    <Position X="4.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAABAgAAAAAAAAAAA=</HashCode>
+      <FileName>SpriteFont.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SerraEngine::GlyphSortType" Collapsed="true">
+    <Position X="3" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAABAAAAAAAAAAAAAAggA=</HashCode>
+      <FileName>SpriteBatch.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SerraEngine::WindowFlags" Collapsed="true">
+    <Position X="8.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAACAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Window.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SerraEngine::ScreenState" Collapsed="true">
+    <Position X="6.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAAAAAAAQAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IGameScreen.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -293,6 +293,6 @@ void MainGame::processInput() {
 	// Switch renderers
 	if (m_inputManager.isKeyPressed(SDLK_1)) {
 		m_currentRenderer++;
-		if (m_currentRenderer >= m_ballRenderers.size()) m_currentRenderer = 0;
+		if (static_cast<unsigned>(m_currentRenderer) >= m_ballRenderers.size()) m_currentRenderer = 0;
 	}
 }

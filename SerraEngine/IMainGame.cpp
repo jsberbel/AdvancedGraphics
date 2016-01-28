@@ -1,0 +1,114 @@
+#include "IMainGame.h"
+#include "SerraEngine.h"
+#include "Timing.h"
+#include "ScreenList.h"
+#include "IGameScreen.h"
+
+namespace SerraEngine {
+
+IMainGame::IMainGame() {
+	m_screenList = std::make_unique<ScreenList>(this);
+}
+
+void IMainGame::init() {
+	SerraEngine::init();
+	initSystems();
+	onInit();
+	addScreens();
+	m_currentScreen = m_screenList->getCurScreen();
+	m_currentScreen->onEntry();
+	m_currentScreen->setRunning();
+}
+
+void IMainGame::initSystems() {
+	m_window.create("Default", 1920, 1080, 0);
+}
+
+void IMainGame::update() {
+	if (m_currentScreen) {
+		switch(m_currentScreen->getState()) {
+		case ScreenState::RUNNING:
+			m_currentScreen->update();
+			break;
+		case ScreenState::CHANGE_NEXT:
+			m_currentScreen->onExit();
+			m_currentScreen = m_screenList->moveNext();
+			if(m_currentScreen) {
+				m_currentScreen->setRunning();
+				m_currentScreen->onEntry();
+			}
+			break;
+		case ScreenState::CHANGE_PREVIOUS:
+			m_currentScreen->onExit();
+			m_currentScreen = m_screenList->movePrev();
+			if (m_currentScreen) {
+				m_currentScreen->setRunning();
+				m_currentScreen->onEntry();
+			}
+			break;
+		case ScreenState::EXIT_APPLICATION:
+			exitGame();
+			break;
+		default: break;
+		}
+	}
+	else exitGame();
+}
+
+void IMainGame::draw() {
+	glViewport(0, 0, m_window.getScreenWidth(), m_window.getScreenHeight());
+	if (m_currentScreen && m_currentScreen->getState() == ScreenState::RUNNING) {
+		m_currentScreen->draw();
+	}
+}
+
+void IMainGame::onSDLEvent(SDL_Event& evnt) {
+	switch (evnt.type) {
+	case SDL_QUIT:
+		m_isRunning = false;
+		break;
+	case SDL_MOUSEMOTION:
+		m_inputManager.setMouseCoords(static_cast<float>(evnt.motion.x), static_cast<float>(evnt.motion.y));
+		break;
+	case SDL_KEYDOWN:
+		m_inputManager.pressKey(evnt.key.keysym.sym);
+		break;
+	case SDL_KEYUP:
+		m_inputManager.releaseKey(evnt.key.keysym.sym);
+		break;
+	case SDL_MOUSEBUTTONDOWN:
+		m_inputManager.pressKey(evnt.button.button);
+		break;
+	case SDL_MOUSEBUTTONUP:
+		m_inputManager.releaseKey(evnt.button.button);
+		break;
+	}
+}
+
+void IMainGame::run() {
+	init();
+	m_isRunning = true;
+	FPSLimiter fpsLimiter;
+	fpsLimiter.setTargetFPS(120.0f);
+
+	while(m_isRunning) {
+		fpsLimiter.begin();
+			m_inputManager.update();
+			update();
+			draw();
+		fpsLimiter.end();
+		m_fps = fpsLimiter.getFPS();
+		m_window.swapBuffer();
+	}
+}
+
+void IMainGame::exitGame() {
+	m_currentScreen->onExit();
+	if (m_screenList) {
+		m_screenList->destroy();
+		m_screenList.reset();
+	}
+	m_isRunning = false;
+}
+
+}

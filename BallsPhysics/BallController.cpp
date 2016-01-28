@@ -102,12 +102,9 @@ void BallController::checkCollision(Ball& b1, Ball& b2) const {
     // Check for collision
     if (collisionDepth > 0) {
 
-        // Push away the less massive one
-        if (b1.mass < b2.mass) {
-            b1.position -= distDir * collisionDepth;
-        } else {
-            b2.position += distDir * collisionDepth;
-        }
+        // Push away the balls based on ratio of masses
+		b1.position -= distDir * collisionDepth * (b2.mass / b1.mass)*0.5f;
+		b2.position += distDir * collisionDepth * (b1.mass / b2.mass)*0.5f;
 
         // Calculate deflection. http://stackoverflow.com/a/345863
         /*float aci = glm::dot(b1.velocity, distDir) / b2.mass;
@@ -126,6 +123,11 @@ void BallController::checkCollision(Ball& b1, Ball& b2) const {
 
 		b1.velocity += (acf - aci) * distDir;
 		b2.velocity += (bcf - bci) * distDir;
+
+		if(glm::length(b1.velocity + b2.velocity) > 0.5f) {
+			auto choice = glm::length(b1.velocity) < glm::length(b2.velocity);
+			choice ? b2.color = b1.color : b1.color = b2.color;
+		}
     }
 }
 

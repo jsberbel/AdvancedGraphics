@@ -158,7 +158,7 @@ void TrippyBallRenderer::renderBalls(SerraEngine::SpriteBatch& spriteBatch, cons
 		float centerDist = glm::length(centerVec);
 
 		// Get angle from the horizontal
-		float angle = atan2(centerVec.x, centerVec.y) / (3.1415926 / DIVISOR);
+		float angle = static_cast<float>(atan2(centerVec.x, centerVec.y) / (3.1415926 / DIVISOR));
 		// Move with time
 		angle -= m_time;
 		// Add the spiral
