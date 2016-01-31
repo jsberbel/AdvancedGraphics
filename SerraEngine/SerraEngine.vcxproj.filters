@@ -87,6 +87,12 @@
     <ClInclude Include="IMainGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DebugRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileSheet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLSLManager.cpp">
@@ -144,6 +150,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IMainGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IOManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

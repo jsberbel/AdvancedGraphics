@@ -1,8 +1,13 @@
 #include<SerraEngine/IMainGame.h>
 #include "App.h"
+#include <iostream>
 
 int main(int argc, char** argv) {
-	App app;
-	app.run();
+	try {
+		App app;
+		app.run();
+	} catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
 	return 0;
 }

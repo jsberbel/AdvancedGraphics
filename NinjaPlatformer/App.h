@@ -1,7 +1,7 @@
 #pragma once
 #include <SerraEngine/IMainGame.h>
+#include "GameplayScreen.h"
 
-class GameplayScreen;
 class App : public SerraEngine::IMainGame
 {
 	std::unique_ptr<GameplayScreen> m_gameplayScreen = nullptr;

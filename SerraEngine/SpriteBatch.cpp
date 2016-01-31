@@ -7,7 +7,7 @@ glm::vec2 Glyph::rotatePoint(glm::vec2 pos, float angle) const {
 	return glm::vec2(pos.x*cos(angle) - pos.y*sin(angle), pos.x*sin(angle) + pos.y*cos(angle));
 }
 
-	Glyph::Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color) :
+Glyph::Glyph(GLuint texture_, float depth_, const glm::vec4 & destRect, const glm::vec4 & uvRect, const ColorRGBA8 &color) :
 	texture(texture_),
 	depth(depth_) 
 {

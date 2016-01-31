@@ -21,7 +21,7 @@ void IMainGame::init() {
 }
 
 void IMainGame::initSystems() {
-	m_window.create("Default", 1920, 1080, 0);
+	m_window.create("Default", 1600, 900, 0);
 }
 
 void IMainGame::update() {
@@ -65,7 +65,7 @@ void IMainGame::draw() {
 void IMainGame::onSDLEvent(SDL_Event& evnt) {
 	switch (evnt.type) {
 	case SDL_QUIT:
-		m_isRunning = false;
+		m_currentScreen->setExit();
 		break;
 	case SDL_MOUSEMOTION:
 		m_inputManager.setMouseCoords(static_cast<float>(evnt.motion.x), static_cast<float>(evnt.motion.y));
@@ -95,9 +95,10 @@ void IMainGame::run() {
 		fpsLimiter.begin();
 			m_inputManager.update();
 			update();
+			if (!m_isRunning) break;
 			draw();
+			m_fps = fpsLimiter.getFPS();
 		fpsLimiter.end();
-		m_fps = fpsLimiter.getFPS();
 		m_window.swapBuffer();
 	}
 }

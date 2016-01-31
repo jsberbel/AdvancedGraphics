@@ -11,7 +11,7 @@ class ScreenList
 protected:
 	std::vector<IGameScreen*> m_screens;
 	IMainGame* m_game = nullptr;
-	int m_currentScreenIndex = -1;
+	int m_currentScreenIndex;
 public:
 	explicit ScreenList(IMainGame* game);
 	~ScreenList();

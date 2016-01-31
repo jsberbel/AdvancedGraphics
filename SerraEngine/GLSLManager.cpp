@@ -1,6 +1,6 @@
 #include "GLSLManager.h"
 #include "ErrorManager.h"
-#include <fstream>
+#include "IOManager.h"
 #include <vector>
 #include <iostream>
 
@@ -12,31 +12,19 @@ namespace SerraEngine {
 		m_fragmentShaderID(0),
 		m_numAttributes(0) {}
 
-	GLSLManager::~GLSLManager()
-	{
-		if (m_vertexShaderID != 0) glDeleteShader(m_vertexShaderID);
-		if (m_fragmentShaderID != 0) glDeleteShader(m_fragmentShaderID);
-		if (m_programID != 0) glDeleteProgram(m_programID);
+	GLSLManager::~GLSLManager() {
+		if (m_vertexShaderID) glDeleteShader(m_vertexShaderID);
+		if (m_fragmentShaderID) glDeleteShader(m_fragmentShaderID);
+		if (m_programID) glDeleteProgram(m_programID);
 	}
 
-	void GLSLManager::compileShader(const std::string &filePath, GLuint id) const
-	{
-		std::ifstream shaderFile(filePath);
-		if (shaderFile.fail()) {
-			perror(filePath.c_str());
-			fatalError("Failed to open: " + filePath);
-		}
-		std::string fileContents = "";
-		std::string line;
-		while (std::getline(shaderFile, line)) {
-			fileContents += line + "\n";
-		}
-		shaderFile.close();
-		const auto contentsPtr = fileContents.c_str();
-		glShaderSource(id, 1, &contentsPtr, nullptr);
+	void GLSLManager::compileShader(const char* source, const std::string &name, GLuint id) {
+		glShaderSource(id, 1, &source, nullptr);
 		glCompileShader(id);
+
 		auto success = 0;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+
 		if (success == GL_FALSE) {
 			auto maxLength = 0;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
@@ -44,11 +32,21 @@ namespace SerraEngine {
 			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
 			glDeleteShader(id);
 			std::cout << &errorLog[0] << std::endl;
-			fatalError("Shader " + filePath + " failed to be compiled.");
+			fatalError("Shader " + name + " failed to be compiled.");
 		}
 	}
 
 	void GLSLManager::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
+		std::string vertSource;
+		std::string fragSource;
+
+		IOManager::loadFileToBuffer(vertexShaderFilePath, vertSource);
+		IOManager::loadFileToBuffer(fragmentShaderFilePath, fragSource);
+
+		compileShadersFromSource(vertSource.c_str(), fragSource.c_str());
+	}
+
+void GLSLManager::compileShadersFromSource(const char* vertexSource, const char* fragmentSource) {
 		m_programID = glCreateProgram();
 		//if (m_programID == 0) fatalError("GLProgram failed to be created.");
 		m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -56,11 +54,11 @@ namespace SerraEngine {
 		m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 		if (m_fragmentShaderID == 0) fatalError("Fragment shader failed to be created.");
 
-		compileShader(vertexShaderFilePath, m_vertexShaderID);
-		compileShader(fragmentShaderFilePath, m_fragmentShaderID);
+		compileShader(vertexSource, "Vertex Shader", m_vertexShaderID);
+		compileShader(fragmentSource, "Fragment Shader", m_fragmentShaderID);
 	}
 
-	void GLSLManager::linkShaders() const
+void GLSLManager::linkShaders() const
 	{
 		glAttachShader(m_programID, m_vertexShaderID);
 		glAttachShader(m_programID, m_fragmentShaderID);
@@ -116,4 +114,7 @@ namespace SerraEngine {
 		}
 	}
 
+	void GLSLManager::dispose() const {
+		if (m_programID) glDeleteProgram(m_programID);
+	}
 }

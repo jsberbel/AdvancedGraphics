@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Camera2D.h" />
+    <ClInclude Include="DebugRenderer.h" />
     <ClInclude Include="ErrorManager.h" />
     <ClInclude Include="IMainGame.h" />
     <ClInclude Include="IGameScreen.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="ParticleEngine2D.h" />
     <ClInclude Include="ScreenList.h" />
     <ClInclude Include="SpriteFont.h" />
+    <ClInclude Include="TileSheet.h" />
     <ClInclude Include="Timing.h" />
     <ClInclude Include="GLSLManager.h" />
     <ClInclude Include="GLTexture.h" />
@@ -200,8 +202,10 @@
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="DebugRenderer.cpp" />
     <ClCompile Include="ErrorManager.cpp" />
     <ClCompile Include="IMainGame.cpp" />
+    <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="ParticleBatch2D.cpp" />
     <ClCompile Include="ParticleEngine2D.cpp" />
     <ClCompile Include="ScreenList.cpp" />

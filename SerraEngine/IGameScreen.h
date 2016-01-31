@@ -42,6 +42,7 @@ public:
 	ScreenState getState() const { return m_currentState; };
 
 	void setRunning() { m_currentState = ScreenState::RUNNING; };
+	void setExit() { m_currentState = ScreenState::EXIT_APPLICATION; };
 	void setParentGame(IMainGame* game) { m_game = game; };
 
 	friend class ScreenList;

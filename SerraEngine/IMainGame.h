@@ -35,6 +35,7 @@ public:
 	void onSDLEvent(SDL_Event &evnt);
 
 	float getFPS() const { return m_fps; };
+	InputManager &getInputManager() { return m_inputManager; };
 };
 
 }
